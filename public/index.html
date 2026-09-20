@@ -470,6 +470,15 @@
   .project-card p{ font-size:.85rem; opacity:.85; }
   .project-initial{ font-family:'Orbitron',sans-serif; font-weight:800; font-size:1.3rem; line-height:1; }
   .project-empty{ grid-column:1 / -1; font-size:.9rem; opacity:.75; }
+  .project-total{
+    display:inline-block; margin-top:-4px;
+    padding:6px 14px; font-size:.85rem; font-weight:600;
+    background:var(--yellow);
+    border:2px solid var(--ink);
+    box-shadow:3px 3px 0 var(--ink);
+  }
+  .project-total[hidden]{ display:none; }
+  .project-total strong{ font-family:'Orbitron',sans-serif; font-weight:800; }
 
   /* ============ FOOTER ============ */
   .footer{ padding-bottom:64px; }
@@ -764,6 +773,7 @@
     <div class="panel panel-alt">
       <p class="eyebrow" data-reveal>EKOSISTEM</p>
       <h2 data-reveal>HidzProject — semua dalam satu atap.</h2>
+      <p class="project-total" id="projectTotal" hidden>Total <strong>0</strong> project</p>
 
       <div class="project-grid" id="projectGrid" data-reveal>
         <article class="project-card" style="--accent:var(--pink)">
@@ -1371,6 +1381,7 @@
   };
   var projectGrid = document.getElementById('projectGrid');
   var projectCountEl = document.getElementById('statProjects');
+  var projectTotalEl = document.getElementById('projectTotal');
   var projectHash = null;
 
   function slugify(name){
@@ -1434,6 +1445,13 @@
     }
   }
 
+  function setProjectTotal(total){
+    if (!projectTotalEl) return;
+    var num = projectTotalEl.querySelector('strong');
+    if (num) num.textContent = String(total);
+    projectTotalEl.hidden = false;
+  }
+
   function renderProjects(list){
     if (!projectGrid) return;
     var frag = document.createDocumentFragment();
@@ -1448,6 +1466,7 @@
     projectGrid.textContent = '';
     projectGrid.appendChild(frag);
     setProjectCount(list.length);
+    setProjectTotal(list.length);
 
     // Observer reveal baru menampilkan elemen setelah 15% areanya terlihat.
     // Untuk daftar yang sangat panjang ambang itu tidak pernah tercapai.
@@ -1524,4 +1543,3 @@
 
 </body>
 </html>
-
