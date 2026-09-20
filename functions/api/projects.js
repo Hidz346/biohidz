@@ -17,22 +17,26 @@ let lastGood = null;      // salinan terakhir yang berhasil dibaca
 let lastCheckAt = 0;
 let lastUp = null;
 let lastStatus = 0;       // kode HTTP terakhir dari HidzProject (0 = gagal tersambung)
+let lastInfo = null;      // ciri halaman terakhir yang diterima, untuk diagnosis
 
-/* Ambil isi string JavaScript dari deklarasi seperti: const _b = "....." */
-function jsString(html, name) {
-    const match = new RegExp('(?:const|let|var)\\s+' + name + '\\s*=\\s*"').exec(html);
-    if (!match) return null;
-    const start = match.index + match[0].length;
-    const end = html.indexOf('"', start);
-    return end === -1 ? null : html.slice(start, end);
+/* Ambil nilai string dari penugasan seperti: const _b = "....." (kutip ganda,
+   tunggal, atau backtick; boleh juga hasil minify: const a=1,_b="..."). Nilai
+   yang lebih pendek dari minLength dilewati, misalnya string kosong. */
+function findString(html, name, minLength) {
+    const pattern = new RegExp('(?<![\\w$.])' + name + '\\s*=\\s*(["\'`])', 'g');
+    let match;
+    while ((match = pattern.exec(html)) !== null) {
+        const start = match.index + match[0].length;
+        const end = html.indexOf(match[1], start);
+        if (end === -1) return null;
+        if (end - start >= minLength) return html.slice(start, end);
+        pattern.lastIndex = end + 1;
+    }
+    return null;
 }
 
-/* Buka data project HidzProject. Mengembalikan null kalau formatnya tidak dikenali. */
-function extractProjects(html) {
-    const blob = jsString(html, '_b');
-    const key = jsString(html, '_k');
-    if (!blob || !key) return null;
-
+/* Buka data project dari blob terenkripsi. Mengembalikan null kalau formatnya tidak dikenali. */
+function decodeProjects(blob, key) {
     let raw;
     try {
         raw = Uint8Array.from(atob(blob), (ch) => ch.charCodeAt(0));
@@ -66,6 +70,22 @@ function extractProjects(html) {
     return projects;
 }
 
+/* Baca halaman HidzProject: daftar project (atau null) dan ciri-ciri halamannya. */
+function inspectPage(html) {
+    const blob = findString(html, '_b', 100);
+    const key = findString(html, '_k', 1);
+    const title = /<title[^>]*>([^<]{0,120})/i.exec(html);
+    return {
+        projects: blob !== null && key !== null ? decodeProjects(blob, key) : null,
+        summary: {
+            size: html.length,
+            title: title ? title[1].trim() : '',
+            blob: blob !== null,
+            key: key !== null
+        }
+    };
+}
+
 async function hashOf(projects) {
     const bytes = new TextEncoder().encode(JSON.stringify(projects));
     const digest = new Uint8Array(await crypto.subtle.digest('SHA-256', bytes));
@@ -85,10 +105,16 @@ async function fetchSource(sourceUrl) {
             signal: controller.signal,
             cf: { cacheEverything: true, cacheTtlByStatus: { '200-299': 60, '300-599': 0 } }
         });
+        const info = {
+            type: res.headers.get('content-type') || '',
+            server: res.headers.get('server') || '',
+            mitigated: res.headers.get('cf-mitigated') || res.headers.get('x-vercel-mitigated') || '',
+            url: res.url || sourceUrl
+        };
         const body = res.status === 200 ? await res.text() : '';
-        return { status: res.status, body };
+        return { status: res.status, body, info };
     } catch (err) {
-        return { status: 0, body: '' };
+        return { status: 0, body: '', info: null };
     } finally {
         clearTimeout(timer);
     }
@@ -108,11 +134,13 @@ export async function onRequest(context) {
            termasuk 403/429 dari firewall. Yang mati: gagal tersambung atau 5xx. */
         lastUp = source.status > 0 && source.status < 500;
         lastStatus = source.status;
+        lastInfo = source.info;
 
         if (source.status === 200) {
-            const projects = extractProjects(source.body);
-            if (projects) {
-                lastGood = { projects, hash: await hashOf(projects), fetchedAt: lastCheckAt };
+            const page = inspectPage(source.body);
+            lastInfo = Object.assign({}, source.info, page.summary);
+            if (page.projects) {
+                lastGood = { projects: page.projects, hash: await hashOf(page.projects), fetchedAt: lastCheckAt };
             }
         }
     }
@@ -121,6 +149,7 @@ export async function onRequest(context) {
         ok: lastGood !== null,
         up: lastUp,
         sourceStatus: lastStatus,
+        sourceInfo: lastInfo,
         checkedAt: lastCheckAt,
         fetchedAt: lastGood ? lastGood.fetchedAt : 0,
         hash: lastGood ? lastGood.hash : '',
@@ -135,4 +164,3 @@ export async function onRequest(context) {
         }
     });
 }
-
