@@ -1,5 +1,5 @@
 # Syahid Subhan Putra
 
-Developer Website & Founder HidzProject.
+Developer Website.
 
 Website: https://hidz.my.id
