@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://hidz.my.id/sitemap.xml
+Sitemap: https://hidz.my.id/sitemap-main.xml
