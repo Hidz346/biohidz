@@ -14,6 +14,7 @@
 <link rel="canonical" href="https://hidz.my.id/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="id_ID">
+<meta property="og:site_name" content="Syahid Subhan Putra">
 <meta property="og:title" content="Syahid Subhan Putra — Developer Website">
 <meta property="og:description" content="Merancang & mengurus HidzProject sendirian — belasan aplikasi web, dikode manual, jalan tiap hari tanpa template.">
 <meta property="og:image" content="https://www.gobox.my.id/file/KGf7WnxZYzAv.jpg">
@@ -28,14 +29,37 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Syahid Subhan Putra",
-  "jobTitle": "Developer Website",
-  "url": "https://hidz.my.id/",
-  "image": "https://www.gobox.my.id/file/KGf7WnxZYzAv.jpg",
-  "sameAs": ["https://wa.me/6289679177876"],
-  "description": "Developer di balik HidzProject, ekosistem aplikasi web.",
-  "knowsAbout": ["JavaScript", "TypeScript", "Firebase", "Supabase", "Next.js", "React", "Web Security"]
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://hidz.my.id/#website",
+      "url": "https://hidz.my.id/",
+      "name": "Syahid Subhan Putra",
+      "alternateName": "Hidz",
+      "inLanguage": "id",
+      "publisher": { "@id": "https://hidz.my.id/#person" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://hidz.my.id/#person",
+      "name": "Syahid Subhan Putra",
+      "alternateName": "Hidz",
+      "jobTitle": "Developer Website",
+      "url": "https://hidz.my.id/",
+      "image": "https://www.gobox.my.id/file/KGf7WnxZYzAv.jpg",
+      "sameAs": ["https://wa.me/6289679177876", "https://github.com/Hidz346"],
+      "description": "Developer di balik HidzProject, ekosistem aplikasi web.",
+      "knowsAbout": ["JavaScript", "TypeScript", "Firebase", "Supabase", "Next.js", "React", "Web Security"]
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://hidzproject.my.id/#organization",
+      "name": "HidzProject",
+      "url": "https://hidzproject.my.id/",
+      "description": "Ekosistem belasan aplikasi web, dari alat kerja harian sampai hiburan digital.",
+      "founder": { "@id": "https://hidz.my.id/#person" }
+    }
+  ]
 }
 </script>
 
