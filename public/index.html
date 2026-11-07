@@ -551,24 +551,22 @@
 
   /* ---------- PARTNER ---------- */
   .partner-card{
-    display:flex; align-items:center; gap:22px;
-    max-width:520px; margin-top:28px; padding:20px;
+    max-width:320px; margin-top:28px;
     background:var(--cream);
     border:var(--border-w) solid var(--ink);
     box-shadow:5px 5px 0 var(--ink);
+    overflow:hidden;
   }
   .partner-photo{
-    flex-shrink:0;
-    width:96px; height:96px;
-    border:var(--border-w) solid var(--ink);
-    border-radius:50%;
-    box-shadow:4px 4px 0 var(--ink);
-    background:var(--cream-2);
+    display:block; width:100%; height:auto; aspect-ratio:1/1;
     object-fit:cover;
+    background:var(--cream-2);
+    border-bottom:var(--border-w) solid var(--ink);
   }
+  .partner-info{ padding:18px 20px 22px; }
   .partner-card h3{ font-size:1.25rem; }
   .partner-card p{ margin-top:2px; font-size:.9rem; opacity:.85; }
-  @media (max-width:420px){ .partner-card{ flex-direction:column; text-align:center; } }
+  .partner-info .btn{ margin-top:16px; }
 </style>
 </head>
 <body>
@@ -910,13 +908,14 @@
   <!-- ============ PARTNER ============ -->
   <section class="panel-section" id="partner">
     <div class="panel">
-      <p class="eyebrow" data-reveal>PARTNER</p>
-      <h2 data-reveal>Teman ngoding sepanjang masa.</h2>
+      <p class="eyebrow" data-reveal>MY PARTNER</p>
+      <h2 data-reveal>Ngoding lebih seru kalau ada partnernya.</h2>
       <article class="partner-card" data-reveal>
-        <img class="partner-photo" src="https://www.gobox.my.id/file/N1uccybXnZI2.jpg" width="96" height="96" loading="lazy" alt="Foto profil Zelloo">
-        <div>
+        <img class="partner-photo" src="https://www.gobox.my.id/file/N1uccybXnZI2.jpg" width="320" height="320" loading="lazy" alt="Foto profil Zelloo">
+        <div class="partner-info">
           <h3>Zelloo</h3>
           <p>Coding friend of all time</p>
+          <a class="btn btn-wa" href="https://wa.me/6285181207025" target="_blank" rel="noopener">WhatsApp</a>
         </div>
       </article>
     </div>
