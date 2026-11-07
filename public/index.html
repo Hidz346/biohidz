@@ -548,6 +548,27 @@
       transition-duration:.2s !important;
     }
   }
+
+  /* ---------- PARTNER ---------- */
+  .partner-card{
+    display:flex; align-items:center; gap:22px;
+    max-width:520px; margin-top:28px; padding:20px;
+    background:var(--cream);
+    border:var(--border-w) solid var(--ink);
+    box-shadow:5px 5px 0 var(--ink);
+  }
+  .partner-photo{
+    flex-shrink:0;
+    width:96px; height:96px;
+    border:var(--border-w) solid var(--ink);
+    border-radius:50%;
+    box-shadow:4px 4px 0 var(--ink);
+    background:var(--cream-2);
+    object-fit:cover;
+  }
+  .partner-card h3{ font-size:1.25rem; }
+  .partner-card p{ margin-top:2px; font-size:.9rem; opacity:.85; }
+  @media (max-width:420px){ .partner-card{ flex-direction:column; text-align:center; } }
 </style>
 </head>
 <body>
@@ -882,6 +903,22 @@
       </div>
 
       <a class="btn btn-cta" href="https://hidzproject.my.id" target="_blank" rel="noopener">BUKA HIDZ PROJECT →</a>
+    </div>
+  </section>
+
+
+  <!-- ============ PARTNER ============ -->
+  <section class="panel-section" id="partner">
+    <div class="panel">
+      <p class="eyebrow" data-reveal>PARTNER</p>
+      <h2 data-reveal>Teman ngoding sepanjang masa.</h2>
+      <article class="partner-card" data-reveal>
+        <img class="partner-photo" src="https://www.gobox.my.id/file/N1uccybXnZI2.jpg" width="96" height="96" loading="lazy" alt="Foto profil Zelloo">
+        <div>
+          <h3>Zelloo</h3>
+          <p>Coding friend of all time</p>
+        </div>
+      </article>
     </div>
   </section>
 
