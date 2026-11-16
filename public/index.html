@@ -569,7 +569,7 @@
   .partner-info .btn{ margin-top:16px; }
 </style>
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<link rel="stylesheet" href="/bio-addons.css?v=9">
+<link rel="stylesheet" href="/bio-addons.css?v=10">
 </head>
 <body>
 
@@ -688,6 +688,7 @@
         <a href="#beranda">Beranda</a>
         <a href="#identitas">ID Card</a>
         <a href="#tentang">Tentang</a>
+        <a href="#keahlian">Keahlian</a>
         <a href="#project">Project</a>
         <a href="#partner">Partner</a>
         <a href="#kontak">Kontak</a>
@@ -702,6 +703,7 @@
         <a href="#beranda">Beranda</a>
         <a href="#identitas">ID Card</a>
         <a href="#tentang">Tentang</a>
+        <a href="#keahlian">Keahlian</a>
         <a href="#project">Project</a>
         <a href="#partner">Partner</a>
         <a href="#kontak">Kontak</a>
@@ -855,45 +857,39 @@
           <li><span>TERSEDIA UNTUK</span><span>KOLABORASI &amp; FREELANCE</span></li>
         </ul>
 
-        <div class="skills-group">
-          <p class="skills-label">BAHASA</p>
-          <div class="skills-row">
-            <span class="skill-badge" style="--accent:var(--yellow)">HTML5</span>
-            <span class="skill-badge" style="--accent:var(--cyan)">CSS3</span>
-            <span class="skill-badge" style="--accent:var(--pink)">JavaScript</span>
-            <span class="skill-badge" style="--accent:var(--violet); color:var(--cream)">TypeScript</span>
-            <span class="skill-badge" style="--accent:var(--cream-2)">PHP</span>
-            <span class="skill-badge" style="--accent:var(--yellow)">Python</span>
-          </div>
-        </div>
 
-        <div class="skills-group">
-          <p class="skills-label">FRAMEWORK &amp; LIBRARY</p>
-          <div class="skills-row">
-            <span class="skill-badge" style="--accent:var(--cyan)">Next.js</span>
-            <span class="skill-badge" style="--accent:var(--pink)">React</span>
-            <span class="skill-badge" style="--accent:var(--violet); color:var(--cream)">Express.js</span>
-            <span class="skill-badge" style="--accent:var(--cream-2)">Tailwind CSS</span>
-            <span class="skill-badge" style="--accent:var(--yellow)">jQuery</span>
-            <span class="skill-badge" style="--accent:var(--cyan)">Bootstrap</span>
-          </div>
-        </div>
 
-        <div class="skills-group">
-          <p class="skills-label">BACKEND &amp; INFRA</p>
-          <div class="skills-row">
-            <span class="skill-badge" style="--accent:var(--pink)">Node.js</span>
-            <span class="skill-badge" style="--accent:var(--violet); color:var(--cream)">MySQL</span>
-            <span class="skill-badge" style="--accent:var(--cream-2)">MongoDB</span>
-            <span class="skill-badge" style="--accent:var(--yellow)">Firebase</span>
-            <span class="skill-badge" style="--accent:var(--cyan)">Supabase</span>
-            <span class="skill-badge" style="--accent:var(--pink)">Vercel</span>
-          </div>
-        </div>
       </div>
     </div>
   </section>
 
+  <!-- ============ KEAHLIAN & TECH STACK ============ -->
+  <section class="panel-section" id="keahlian">
+    <div class="panel panel-alt">
+      <p class="eyebrow" data-reveal>KEAHLIAN &amp; TEKNOLOGI</p>
+      <h2 data-reveal>Stack yang dipakai membangun HidzProject.</h2>
+      <div class="stack-stage" id="stackStage" data-reveal>
+        <div class="stack-chips" id="stackChips" aria-hidden="true"></div>
+        <button type="button" class="stack-folder" id="stackFolder" aria-expanded="false" aria-controls="stackChips">
+          <span class="folder-back"><span class="folder-tab">STACK</span></span>
+          <span class="folder-paper p1"></span>
+          <span class="folder-paper p2"></span>
+          <span class="folder-front">
+            <span class="folder-badge-row"><span class="folder-title">Tech Stack</span><span class="folder-count">18</span></span>
+            <span class="folder-hint" id="stackFolderHint">Klik untuk buka</span>
+          </span>
+        </button>
+      </div>
+      <div class="stack-marquee" aria-label="Daftar teknologi"><div class="stack-marquee-track" id="stackMarqueeTrack"></div></div>
+      <div class="stack-filters" id="stackFilters" role="tablist" aria-label="Filter keahlian">
+        <button type="button" class="stack-tab is-active" data-stack-cat="all" role="tab" aria-selected="true">Semua</button>
+        <button type="button" class="stack-tab" data-stack-cat="bahasa" role="tab" aria-selected="false">Bahasa</button>
+        <button type="button" class="stack-tab" data-stack-cat="framework" role="tab" aria-selected="false">Framework</button>
+        <button type="button" class="stack-tab" data-stack-cat="backend" role="tab" aria-selected="false">Backend &amp; Infra</button>
+      </div>
+      <div class="stack-grid" id="stackGrid"></div>
+    </div>
+  </section>
   <!-- ============ PROJECTS ============ -->
   <section class="panel-section" id="project">
     <div class="panel panel-alt">
@@ -1718,6 +1714,6 @@
 })();
 </script>
 
-<script src="/bio-addons.js?v=9"></script>
+<script src="/bio-addons.js?v=10"></script>
 </body>
 </html>

@@ -232,3 +232,127 @@
     });
   });
 })();
+(function(){
+  var DATA = [
+    { n:'HTML5', c:'bahasa', l:'BAHASA', s:'H5', bg:'var(--yellow)', pop:0 },
+    { n:'CSS3', c:'bahasa', l:'BAHASA', s:'CS', bg:'var(--cyan)', pop:0 },
+    { n:'JavaScript', c:'bahasa', l:'BAHASA', s:'JS', bg:'var(--pink)', pop:1 },
+    { n:'TypeScript', c:'bahasa', l:'BAHASA', s:'TS', bg:'var(--cyan)', pop:1 },
+    { n:'PHP', c:'bahasa', l:'BAHASA', s:'PHP', bg:'var(--cream-2)', pop:0 },
+    { n:'Python', c:'bahasa', l:'BAHASA', s:'PY', bg:'var(--yellow)', pop:1 },
+    { n:'Next.js', c:'framework', l:'FRAMEWORK', s:'NX', bg:'var(--cyan)', pop:1 },
+    { n:'React', c:'framework', l:'FRAMEWORK', s:'RC', bg:'var(--pink)', pop:1 },
+    { n:'Express.js', c:'framework', l:'FRAMEWORK', s:'EX', bg:'var(--yellow)', pop:1 },
+    { n:'Tailwind CSS', c:'framework', l:'FRAMEWORK', s:'TW', bg:'var(--cyan)', pop:1 },
+    { n:'jQuery', c:'framework', l:'FRAMEWORK', s:'JQ', bg:'var(--cream-2)', pop:0 },
+    { n:'Bootstrap', c:'framework', l:'FRAMEWORK', s:'BS', bg:'var(--pink)', pop:0 },
+    { n:'Node.js', c:'backend', l:'BACKEND', s:'ND', bg:'var(--yellow)', pop:1 },
+    { n:'MySQL', c:'backend', l:'BACKEND', s:'SQL', bg:'var(--cyan)', pop:0 },
+    { n:'MongoDB', c:'backend', l:'BACKEND', s:'MG', bg:'var(--cream-2)', pop:0 },
+    { n:'Firebase', c:'backend', l:'BACKEND', s:'FB', bg:'var(--yellow)', pop:1 },
+    { n:'Supabase', c:'backend', l:'BACKEND', s:'SB', bg:'var(--pink)', pop:1 },
+    { n:'Vercel', c:'backend', l:'BACKEND', s:'VC', bg:'var(--cyan)', pop:0 }
+  ];
+  var stage = document.getElementById('stackStage');
+  var folder = document.getElementById('stackFolder');
+  var hint = document.getElementById('stackFolderHint');
+  var chipsBox = document.getElementById('stackChips');
+  var marquee = document.getElementById('stackMarqueeTrack');
+  var grid = document.getElementById('stackGrid');
+  var tabs = document.querySelectorAll('[data-stack-cat]');
+  if (!stage || !folder || !grid) return;
+  var arc = [
+    [-165,-42,-7],[-118,-98,-4],[-46,-126,-2],[46,-126,2],[118,-98,4],
+    [165,-42,7],[-148,14,-5],[-72,-66,-3],[72,-66,3],[148,14,5]
+  ];
+  var popped = DATA.filter(function(item){ return item.pop; });
+
+  function layoutChips(){
+    var w = stage.clientWidth || 320;
+    var scale = Math.min(1, Math.max(0.56, (w - 90) / 340));
+    var nodes = chipsBox.querySelectorAll('.stack-chip');
+    nodes.forEach(function(el, i){
+      var p = arc[i % arc.length];
+      el.style.setProperty('--tx', (p[0] * scale).toFixed(0) + 'px');
+      el.style.setProperty('--ty', (p[1] * Math.max(0.82, scale)).toFixed(0) + 'px');
+      el.style.setProperty('--tr', p[2] + 'deg');
+    });
+  }
+
+  function renderStack(cat, flashName){
+    var frag = document.createDocumentFragment();
+    var list = cat === 'all' ? DATA : DATA.filter(function(x){ return x.c === cat; });
+    list.forEach(function(item, i){
+      var card = document.createElement('div');
+      card.className = 'stack-card' + (flashName === item.n ? ' is-flash' : '');
+      card.style.animationDelay = Math.min(i * 22, 220) + 'ms';
+      var mark = document.createElement('span');
+      mark.className = 'stack-mark'; mark.style.background = item.bg; mark.textContent = item.s;
+      var meta = document.createElement('div'); meta.className = 'stack-meta';
+      var nm = document.createElement('div'); nm.className = 'stack-name'; nm.textContent = item.n;
+      var sub = document.createElement('div'); sub.className = 'stack-sub'; sub.textContent = item.l;
+      meta.appendChild(nm); meta.appendChild(sub);
+      card.appendChild(mark); card.appendChild(meta);
+      frag.appendChild(card);
+    });
+    grid.textContent = ''; grid.appendChild(frag);
+  }
+
+  if (chipsBox){
+    var cf = document.createDocumentFragment();
+    popped.forEach(function(item, i){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'stack-chip';
+      b.style.setProperty('--dl', (-i * 0.45) + 's');
+      b.style.setProperty('--bd', (3.4 + (i % 4) * 0.35) + 's');
+      b.style.transitionDelay = (i * 26) + 'ms';
+      var d = document.createElement('span'); d.className = 'chip-dot'; d.style.setProperty('--cc', item.bg);
+      b.appendChild(d); b.appendChild(document.createTextNode(item.n));
+      b.addEventListener('click', function(e){
+        e.stopPropagation();
+        tabs.forEach(function(t){
+          var on = t.getAttribute('data-stack-cat') === item.c;
+          t.classList.toggle('is-active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        renderStack(item.c, item.n);
+      });
+      cf.appendChild(b);
+    });
+    chipsBox.appendChild(cf);
+    layoutChips();
+    window.addEventListener('resize', layoutChips);
+  }
+
+  if (marquee){
+    var mf = document.createDocumentFragment();
+    DATA.concat(DATA).forEach(function(item){
+      var p = document.createElement('span'); p.className = 'marquee-pill';
+      var d = document.createElement('span'); d.className = 'chip-dot'; d.style.setProperty('--cc', item.bg);
+      p.appendChild(d); p.appendChild(document.createTextNode(item.n));
+      mf.appendChild(p);
+    });
+    marquee.appendChild(mf);
+  }
+
+  folder.addEventListener('click', function(){
+    layoutChips();
+    var open = stage.classList.toggle('is-open');
+    folder.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (hint) hint.textContent = open ? 'Klik untuk tutup' : 'Klik untuk buka';
+  });
+
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var cat = tab.getAttribute('data-stack-cat');
+      tabs.forEach(function(t){
+        var on = t === tab;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      renderStack(cat);
+    });
+  });
+
+  renderStack('all');
+})();
