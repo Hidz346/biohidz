@@ -17,7 +17,7 @@
 .id-anchor-point{ position:relative; width:100%; height:0; display:flex; justify-content:center; overflow:visible; }
 .id-lanyard-svg{ position:absolute; top:0; left:50%; width:2px; height:2px; overflow:visible; pointer-events:none; z-index:6; }
 
-.id-card-rig{ position:relative; margin-top:52px; width:min(308px, 82vw); aspect-ratio:308 / 446; perspective:1100px; z-index:5; overflow:visible; }
+.id-card-rig{ position:relative; margin-top:52px; width:min(308px, 82vw); aspect-ratio:308 / 472; perspective:1100px; z-index:5; overflow:visible; }
 .id-card-body{ position:relative; width:100%; height:100%; transform-style:preserve-3d; will-change:transform; cursor:grab; touch-action:none; user-select:none; -webkit-user-select:none; }
 .id-card-body.is-grabbed{ cursor:grabbing; }
 .id-face{
@@ -49,3 +49,14 @@
 .id-front-name{ padding-bottom:2px; }
 .id-front-sub{ text-align:center; font-family:var(--font-mono); font-size:.66rem; font-weight:800; letter-spacing:.1em; color:var(--violet); margin-bottom:8px; }
 .id-banner-role{ font-size:clamp(.88rem, 3.6vw, 1.04rem); letter-spacing:.04em; }
+.id-front-topmeta{ padding-bottom:8px; }
+.id-front-stage{ margin:0 12px; }
+.id-front-specs{
+  margin:10px 12px 0; padding:9px 12px; background:var(--cream-2); border:2.5px solid var(--ink);
+  border-radius:10px; box-shadow:3px 3px 0 var(--ink); display:flex; flex-direction:column; gap:5px;
+}
+.id-fspec-row{ display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:.76rem; line-height:1.25; }
+.id-fspec-row span:first-child{ font-family:var(--font-mono); font-size:.66rem; font-weight:700; opacity:.72; }
+.id-fspec-row span:last-child{ font-weight:700; text-align:right; color:var(--ink); }
+.id-fspec-row strong{ color:var(--violet); font-weight:800; }
+.id-back-specs{ border-radius:12px; padding:10px 13px; gap:7px; }
