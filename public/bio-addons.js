@@ -342,52 +342,90 @@
 })();
 (function(){
   if (document.getElementById('hidzBgmBtn')) return;
+  var NS = 'http://www.w3.org/2000/svg';
   var SRC = 'https://audio.jukehost.co.uk/01a18d50-31e2-71ba-b7be-01326924c3fa';
   var audio = document.createElement('audio');
   audio.src = SRC; audio.loop = true; audio.preload = 'auto'; audio.volume = 0.45; audio.setAttribute('playsinline', '');
-  var btn = document.createElement('button');
-  btn.id = 'hidzBgmBtn'; btn.type = 'button'; btn.className = 'bgm-btn';
-  btn.setAttribute('aria-label', 'Putar atau jeda musik latar'); btn.setAttribute('aria-pressed', 'false');
-  var bars = document.createElement('span'); bars.className = 'bgm-bars'; bars.setAttribute('aria-hidden', 'true');
-  for (var i = 0; i < 3; i++) bars.appendChild(document.createElement('span'));
-  var lbl = document.createElement('span'); lbl.textContent = 'PLAY';
-  btn.appendChild(bars); btn.appendChild(lbl);
-  document.body.appendChild(audio); document.body.appendChild(btn);
 
-  var userPaused = false, fadeRaf = null, unlocked = false;
+  var btn = document.createElement('button');
+  btn.id = 'hidzBgmBtn'; btn.type = 'button'; btn.className = 'bgm-nav-btn';
+  btn.setAttribute('aria-label', 'Putar atau jeda musik'); btn.setAttribute('aria-pressed', 'false');
+
+  var svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('class', 'bgm-note-svg'); svg.setAttribute('aria-hidden', 'true');
+  var stem = document.createElementNS(NS, 'path');
+  stem.setAttribute('d', 'M9 17V5l10-2v12'); stem.setAttribute('fill', 'none'); stem.setAttribute('stroke', 'currentColor'); stem.setAttribute('stroke-width', '2.4'); stem.setAttribute('stroke-linecap', 'round'); stem.setAttribute('stroke-linejoin', 'round');
+  var c1 = document.createElementNS(NS, 'circle'); c1.setAttribute('cx', '6.5'); c1.setAttribute('cy', '17.5'); c1.setAttribute('r', '2.6'); c1.setAttribute('fill', 'currentColor');
+  var c2 = document.createElementNS(NS, 'circle'); c2.setAttribute('cx', '16.5'); c2.setAttribute('cy', '15.5'); c2.setAttribute('r', '2.6'); c2.setAttribute('fill', 'currentColor');
+  var slash = document.createElementNS(NS, 'line');
+  slash.setAttribute('class', 'bgm-slash'); slash.setAttribute('x1', '4'); slash.setAttribute('y1', '4'); slash.setAttribute('x2', '20'); slash.setAttribute('y2', '20');
+  slash.setAttribute('stroke', '#FF5D8F'); slash.setAttribute('stroke-width', '2.6'); slash.setAttribute('stroke-linecap', 'round');
+  svg.appendChild(stem); svg.appendChild(c1); svg.appendChild(c2); svg.appendChild(slash);
+  btn.appendChild(svg);
+
+  var navInner = document.querySelector('.nav-inner');
+  var navToggle = document.getElementById('navToggle');
+  if (navInner && navToggle){
+    var actions = document.createElement('div'); actions.className = 'nav-actions';
+    navInner.insertBefore(actions, navToggle);
+    actions.appendChild(btn); actions.appendChild(navToggle);
+  }
+  document.body.appendChild(audio);
+  var userPaused = false, fadeRaf = null;
   function syncBtn(){
     var playing = !audio.paused;
     btn.classList.toggle('is-playing', playing);
     btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
-    lbl.textContent = playing ? 'ON' : (userPaused ? 'OFF' : 'PLAY');
   }
   function fadeIn(){
     if (fadeRaf) cancelAnimationFrame(fadeRaf);
     var start = performance.now();
     function tick(now){
-      var p = Math.min(1, (now - start) / 1100);
+      var p = Math.min(1, (now - start) / 1000);
       audio.volume = 0.05 + p * 0.40;
       if (p < 1 && !audio.paused) fadeRaf = requestAnimationFrame(tick); else fadeRaf = null;
     }
     fadeRaf = requestAnimationFrame(tick);
   }
-  function removeUnlock(){
-    if (unlocked) return; unlocked = true;
-    ['pointerdown', 'touchstart', 'keydown'].forEach(function(ev){ window.removeEventListener(ev, onFirstGesture, true); });
-  }
-  function tryStart(){
+  function playAudio(){
     if (userPaused || !audio.paused) return;
     audio.volume = 0.05;
     var p = audio.play();
-    if (p && typeof p.then === 'function') p.then(function(){ removeUnlock(); fadeIn(); syncBtn(); }).catch(function(){ syncBtn(); });
+    if (p && typeof p.then === 'function') p.then(function(){ fadeIn(); syncBtn(); }).catch(function(){ syncBtn(); });
   }
-  function onFirstGesture(e){ if (!e.target || (e.target !== btn && !btn.contains(e.target))) if (!userPaused && audio.paused) tryStart(); }
-  ['pointerdown', 'touchstart', 'keydown'].forEach(function(ev){ window.addEventListener(ev, onFirstGesture, { capture:true, passive:true }); });
+
   btn.addEventListener('click', function(){
-    if (audio.paused){ userPaused = false; removeUnlock(); tryStart(); }
-    else { userPaused = true; removeUnlock(); if (fadeRaf) cancelAnimationFrame(fadeRaf); audio.pause(); }
+    if (audio.paused){ userPaused = false; playAudio(); }
+    else { userPaused = true; if (fadeRaf) cancelAnimationFrame(fadeRaf); audio.pause(); }
     syncBtn();
   });
   audio.addEventListener('play', syncBtn); audio.addEventListener('pause', syncBtn);
-  tryStart();
+
+  // Intro Pembuka
+  var intro = document.createElement('div'); intro.id = 'hidzIntro'; intro.className = 'hidz-intro';
+  var card = document.createElement('div'); card.className = 'intro-card';
+  var top = document.createElement('div'); top.className = 'intro-top';
+  var logo = document.createElement('img'); logo.className = 'intro-logo'; logo.src = '/logo.png'; logo.alt = 'Logo HidzProject';
+  var tag = document.createElement('span'); tag.className = 'intro-tag'; tag.textContent = 'HIDZ.MY.ID';
+  top.appendChild(logo); top.appendChild(tag);
+  var h2 = document.createElement('h2'); h2.className = 'intro-name'; h2.textContent = 'SYAHID SUBHAN PUTRA';
+  var desc = document.createElement('p'); desc.className = 'intro-desc'; desc.textContent = 'Developer Website · HidzProject';
+  var acts = document.createElement('div'); acts.className = 'intro-actions';
+  var enterBtn = document.createElement('button'); enterBtn.type = 'button'; enterBtn.className = 'btn intro-enter'; enterBtn.textContent = 'MASUK →';
+  var muteBtn = document.createElement('button'); muteBtn.type = 'button'; muteBtn.className = 'intro-mute'; muteBtn.textContent = 'Masuk tanpa musik';
+  acts.appendChild(enterBtn); acts.appendChild(muteBtn);
+  card.appendChild(top); card.appendChild(h2); card.appendChild(desc); card.appendChild(acts);
+  intro.appendChild(card);
+  document.documentElement.style.overflow = 'hidden';
+  document.body.appendChild(intro);
+
+  function closeIntro(withMusic){
+    if (intro.classList.contains('is-leaving')) return;
+    if (withMusic){ userPaused = false; playAudio(); } else { userPaused = true; syncBtn(); }
+    intro.classList.add('is-leaving');
+    document.documentElement.style.overflow = '';
+    setTimeout(function(){ if (intro.parentNode) intro.parentNode.removeChild(intro); }, 480);
+  }
+  enterBtn.addEventListener('click', function(){ closeIntro(true); });
+  muteBtn.addEventListener('click', function(){ closeIntro(false); });
 })();
