@@ -13,7 +13,9 @@
     var y = wib.getUTCFullYear(), m = wib.getUTCMonth() + 1, d = wib.getUTCDate();
     var age = y - 2012 - ((m > 1 || (m === 1 && d >= 13)) ? 0 : 1);
     var txt = age + ' Years Old';
+    var frontAge = document.getElementById('idFrontAge');
     var cardAge = document.getElementById('idCardAge');
+    if (frontAge) frontAge.textContent = txt;
     if (cardAge) cardAge.textContent = txt;
     var aboutAge = document.getElementById('aboutAgeText');
     if (aboutAge){
@@ -56,18 +58,18 @@
   if (spEl && 'MutationObserver' in window) new MutationObserver(syncLiveBadges).observe(spEl, { attributes:true, attributeFilter:['data-count-to'] });
   document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible'){ updateAgeAndYear(); syncLiveBadges(); } });
   window.addEventListener('focus', function(){ updateAgeAndYear(); syncLiveBadges(); });
-  var sectionEl = document.getElementById('idStage');
+  var stageEl = document.getElementById('idStage');
   var cardEl = document.getElementById('idCardBody');
   var flipBtn = document.getElementById('idFlipBtn');
   var strapOutline = document.getElementById('idStrapOutline');
   var strapBody = document.getElementById('idStrapBody');
   var strapStripe = document.getElementById('idStrapStripe');
   var claspEl = document.getElementById('idClasp');
-  if (!sectionEl || !cardEl) return;
+  if (!stageEl || !cardEl) return;
 
   var strapRestLen = 52, cardHeight = cardEl.offsetHeight || 446, cardHalfH = cardHeight * 0.5, restCenterY = strapRestLen + cardHalfH;
   var posX = 0, posY = 0, velX = 0, velY = 0, rotX = 0, velRotX = 0, rotY = 0, velRotY = 0, rotZ = 0, velRotZ = 0;
-  var targetFlipY = 0, hoverX = 0, hoverY = 0, glareX = 50, glareY = 30;
+  var targetFlipY = 0, isFreeSpin = false, hoverX = 0, hoverY = 0, glareX = 50, glareY = 30;
   var ctrlX = 0, ctrlY = 36, cVelX = 0, cVelY = 0;
   var isDragging = false, activePointerId = null, startClientX = 0, startClientY = 0, startPosX = 0, startPosY = 0, startTime = 0, samples = [], rafId = null;
 
@@ -96,8 +98,8 @@
   }
   function ensureLoop(){ if (!rafId) rafId = requestAnimationFrame(step); }
   function flipInDirection(dir){
+    isFreeSpin = false;
     targetFlipY = Math.round(targetFlipY / 180) * 180 + (dir >= 0 ? 180 : -180);
-    velRotY = dir >= 0 ? 14 : -14;
     velRotZ += dir >= 0 ? -4 : 4;
     ensureLoop();
   }
@@ -105,43 +107,36 @@
   function step(){
     rafId = null;
     if (!isDragging){
-      // Pegas lembut agar kartu bisa melayang jauh & berayun seperti bandul
-      velX = (velX - 0.019 * posX) * 0.955;
-      velY = (velY - 0.019 * posY) * 0.955;
+      velX = (velX - 0.02 * posX) * 0.95;
+      velY = (velY - 0.02 * posY) * 0.95;
       posX += velX; posY += velY;
 
-      // Putaran Y bebas berputar-putar jika masih kencang, baru mengunci ke sisi terdekat saat melambat
-      if (Math.abs(velRotY) > 2.2){
-        velRotY *= 0.976;
-        rotY += velRotY;
-        targetFlipY = Math.round(rotY / 180) * 180;
+      if (isFreeSpin && Math.abs(velRotY) > 2.4){
+        velRotY *= 0.976; rotY += velRotY; targetFlipY = Math.round(rotY / 180) * 180;
       } else {
-        velRotY = (velRotY + ((targetFlipY + hoverY) - rotY) * 0.11) * 0.78;
+        isFreeSpin = false;
+        velRotY = (velRotY + ((targetFlipY + hoverY) - rotY) * 0.14) * 0.74;
         rotY += velRotY;
       }
 
-      // Putaran Z mengikuti sudut tali pendulum + momentum
       var ropeAngle = Math.atan2(posX, Math.max(80, restCenterY + posY)) * (180 / Math.PI);
-      var targetZ = clamp(-ropeAngle * 0.85 + velX * 0.55, -75, 75);
-      velRotZ = (velRotZ + (targetZ - rotZ) * 0.12) * 0.84;
+      velRotZ = (velRotZ + (clamp(-ropeAngle * 0.85 + velX * 0.5, -75, 75) - rotZ) * 0.12) * 0.84;
       rotZ += velRotZ;
-
-      // Putaran X 3D tumbling saat terlontar
-      velRotX = (velRotX + ((hoverX + velY * 0.45) - rotX) * 0.10) * 0.86;
+      velRotX = (velRotX + ((hoverX + velY * 0.4) - rotX) * 0.11) * 0.84;
       rotX += velRotX;
     }
     renderCard();
     var moving = isDragging || Math.hypot(posX, posY) > 0.35 || Math.hypot(velX, velY) > 0.15 || Math.abs(velRotY) > 0.12 || Math.abs((targetFlipY + hoverY) - rotY) > 0.25 || Math.abs(rotZ) > 0.25 || Math.abs(velRotZ) > 0.12 || Math.abs(rotX - hoverX) > 0.25 || Math.hypot(cVelX, cVelY) > 0.15;
     if (moving){ rafId = requestAnimationFrame(step); }
-    else { sectionEl.classList.remove('is-dragging'); posX = 0; posY = 0; velX = 0; velY = 0; rotZ = 0; velRotZ = 0; rotX = hoverX; velRotX = 0; rotY = targetFlipY + hoverY; velRotY = 0; sectionEl.classList.remove('is-dragging'); renderCard(); }
+    else { stageEl.classList.remove('is-dragging'); posX = 0; posY = 0; velX = 0; velY = 0; rotZ = 0; velRotZ = 0; rotX = hoverX; velRotX = 0; rotY = targetFlipY + hoverY; velRotY = 0; renderCard(); }
   }
   function pushSample(x, y){ samples.push({ x:x, y:y, t:performance.now() }); if (samples.length > 6) samples.shift(); }
 
   cardEl.addEventListener('pointerdown', function(e){
     if (e.button !== undefined && e.button !== 0) return;
-    isDragging = true; activePointerId = e.pointerId;
+    isDragging = true; isFreeSpin = false; activePointerId = e.pointerId;
     try { cardEl.setPointerCapture(e.pointerId); } catch (err) {}
-    sectionEl.classList.add('is-dragging'); cardEl.classList.add('is-grabbed');
+    stageEl.classList.add('is-dragging'); cardEl.classList.add('is-grabbed');
     startClientX = e.clientX; startClientY = e.clientY; startPosX = posX; startPosY = posY; startTime = performance.now();
     velX = 0; velY = 0; velRotY = 0; velRotZ = 0; velRotX = 0; samples = []; pushSample(e.clientX, e.clientY); ensureLoop();
   });
@@ -178,18 +173,17 @@
     var totalDx = e.clientX - startClientX, totalDy = e.clientY - startClientY, elapsed = now - startTime;
 
     if (Math.hypot(totalDx, totalDy) < 8 && elapsed < 250){ flipInDirection(1); return; }
-    if (elapsed < 350 && Math.abs(totalDx) > 36 && Math.abs(totalDx) > Math.abs(totalDy) * 1.4 && speed < 14){
-      velX = vx * 0.5; velY = vy * 0.3; flipInDirection(totalDx >= 0 ? 1 : -1); return;
+    if (elapsed < 360 && Math.abs(totalDx) > 36 && Math.abs(totalDx) > Math.abs(totalDy) * 1.35 && speed < 15){
+      velX = vx * 0.45; velY = vy * 0.25; flipInDirection(totalDx >= 0 ? 1 : -1); return;
     }
 
-    velX = clamp(vx * 1.45, -95, 95);
-    velY = clamp(vy * 1.45, -95, 95);
-    if (speed >= 3.5){
-      var dir = vx !== 0 ? (vx > 0 ? 1 : -1) : 1;
-      velRotY = dir * clamp(speed * 1.65, 16, 60);
-      velRotZ = clamp(vx * 0.85, -28, 28);
-      velRotX = clamp(-vy * 0.85, -28, 28);
+    velX = clamp(vx * 1.45, -95, 95); velY = clamp(vy * 1.45, -95, 95);
+    if (speed >= 5){
+      isFreeSpin = true;
+      velRotY = (vx !== 0 ? (vx > 0 ? 1 : -1) : 1) * clamp(speed * 1.65, 16, 60);
+      velRotZ = clamp(vx * 0.85, -28, 28); velRotX = clamp(-vy * 0.85, -28, 28);
     } else {
+      isFreeSpin = false;
       targetFlipY = Math.round(rotY / 180) * 180;
     }
     ensureLoop();
@@ -208,7 +202,7 @@
   var lastScrollY = window.scrollY;
   window.addEventListener('scroll', function(){
     var sy = window.scrollY, delta = clamp(sy - lastScrollY, -35, 35); lastScrollY = sy;
-    if (!isDragging && Math.abs(delta) > 1){ velY -= delta * 0.16; velRotX += delta * 0.12; ensureLoop(); }
+    if (!isDragging && Math.abs(delta) > 1){ velY -= delta * 0.14; velRotX += delta * 0.10; ensureLoop(); }
   }, { passive:true });
 
   renderCard();
