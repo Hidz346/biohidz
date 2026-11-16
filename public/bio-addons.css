@@ -134,3 +134,18 @@
 .stack-meta{ min-width:0; }
 .stack-name{ font-family:var(--font-display); font-size:.82rem; font-weight:800; line-height:1.2; }
 .stack-sub{ font-family:var(--font-mono); font-size:.64rem; font-weight:700; opacity:.72; margin-top:2px; }
+.bgm-btn{
+  position:fixed; left:20px; bottom:20px; z-index:60; height:46px; padding:0 14px;
+  display:inline-flex; align-items:center; gap:9px; cursor:pointer;
+  background:var(--cream); color:var(--ink); border:var(--border-w) solid var(--ink);
+  box-shadow:4px 4px 0 var(--ink); font-family:var(--font-mono); font-size:.72rem; font-weight:800;
+  transition:transform .16s ease, box-shadow .16s ease, background .2s ease;
+}
+.bgm-btn:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
+.bgm-btn.is-playing{ background:var(--yellow); }
+.bgm-bars{ display:inline-flex; align-items:flex-end; gap:2.5px; height:14px; }
+.bgm-bars span{ width:3px; height:4px; background:var(--ink); display:block; transition:height .2s ease; }
+.bgm-btn.is-playing .bgm-bars span:nth-child(1){ animation:bgmEq .62s ease-in-out infinite alternate; }
+.bgm-btn.is-playing .bgm-bars span:nth-child(2){ animation:bgmEq .46s ease-in-out .15s infinite alternate; }
+.bgm-btn.is-playing .bgm-bars span:nth-child(3){ animation:bgmEq .74s ease-in-out .28s infinite alternate; }
+@keyframes bgmEq{ 0%{ height:4px; } 100%{ height:14px; } }

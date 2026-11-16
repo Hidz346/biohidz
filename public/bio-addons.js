@@ -358,3 +358,87 @@
 
   renderStack('all');
 })();
+(function(){
+  var SRC = 'https://audio.jukehost.co.uk/01a18d50-31e2-71ba-b7be-01326924c3fa';
+  var audio = document.createElement('audio');
+  audio.src = SRC; audio.loop = true; audio.preload = 'auto'; audio.volume = 0.45;
+  audio.setAttribute('playsinline', '');
+
+  var btn = document.createElement('button');
+  btn.type = 'button'; btn.className = 'bgm-btn';
+  btn.setAttribute('aria-label', 'Putar atau jeda musik latar');
+  btn.setAttribute('aria-pressed', 'false');
+
+  var bars = document.createElement('span'); bars.className = 'bgm-bars'; bars.setAttribute('aria-hidden', 'true');
+  for (var i = 0; i < 3; i++) bars.appendChild(document.createElement('span'));
+  var lbl = document.createElement('span'); lbl.textContent = 'MUSIC';
+  btn.appendChild(bars); btn.appendChild(lbl);
+
+  document.body.appendChild(audio);
+  document.body.appendChild(btn);
+
+  var userPaused = false, fadeRaf = null, unlocked = false;
+
+  function syncBtn(){
+    var playing = !audio.paused;
+    btn.classList.toggle('is-playing', playing);
+    btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    lbl.textContent = playing ? 'ON' : (userPaused ? 'OFF' : 'PLAY');
+  }
+
+  function fadeIn(){
+    if (fadeRaf) cancelAnimationFrame(fadeRaf);
+    var start = performance.now();
+    function tick(now){
+      var p = Math.min(1, (now - start) / 1100);
+      audio.volume = 0.05 + p * 0.40;
+      if (p < 1 && !audio.paused) fadeRaf = requestAnimationFrame(tick);
+      else fadeRaf = null;
+    }
+    fadeRaf = requestAnimationFrame(tick);
+  }
+  function removeUnlock(){
+    if (unlocked) return;
+    unlocked = true;
+    ['pointerdown', 'touchstart', 'keydown'].forEach(function(ev){
+      window.removeEventListener(ev, onFirstGesture, true);
+    });
+  }
+
+  function tryStart(){
+    if (userPaused || !audio.paused) return;
+    audio.volume = 0.05;
+    var p = audio.play();
+    if (p && typeof p.then === 'function'){
+      p.then(function(){ removeUnlock(); fadeIn(); syncBtn(); }).catch(function(){ syncBtn(); });
+    }
+  }
+
+  function onFirstGesture(e){
+    if (e.target && (e.target === btn || btn.contains(e.target))) return;
+    if (!userPaused && audio.paused) tryStart();
+  }
+
+  ['pointerdown', 'touchstart', 'keydown'].forEach(function(ev){
+    window.addEventListener(ev, onFirstGesture, { capture:true, passive:true });
+  });
+
+  btn.addEventListener('click', function(){
+    if (audio.paused){
+      userPaused = false;
+      removeUnlock();
+      tryStart();
+    } else {
+      userPaused = true;
+      removeUnlock();
+      if (fadeRaf) cancelAnimationFrame(fadeRaf);
+      audio.pause();
+    }
+    syncBtn();
+  });
+
+  audio.addEventListener('play', syncBtn);
+  audio.addEventListener('pause', syncBtn);
+  audio.addEventListener('error', function(){ btn.hidden = true; });
+  tryStart();
+})();
