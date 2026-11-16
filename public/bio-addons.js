@@ -437,47 +437,39 @@
   });
   audio.addEventListener('play', syncBtn); audio.addEventListener('pause', syncBtn);
 
-  var intro = document.createElement('div'); intro.id = 'hidzIntro'; intro.className = 'hidz-intro';
-  var cTop = document.createElement('div'); cTop.className = 'intro-curtain intro-curtain-top';
-  var cBot = document.createElement('div'); cBot.className = 'intro-curtain intro-curtain-bot';
-  var box = document.createElement('div'); box.className = 'intro-box';
-  var head = document.createElement('div'); head.className = 'intro-head';
-  var logo = document.createElement('img'); logo.className = 'intro-logo'; logo.src = '/logo.png'; logo.alt = 'Logo HidzProject';
-  var pill = document.createElement('span'); pill.className = 'intro-pill'; pill.textContent = 'HIDZ.MY.ID';
-  head.appendChild(logo); head.appendChild(pill);
-  var ttl = document.createElement('h2'); ttl.className = 'intro-title'; ttl.textContent = 'SYAHID SUBHAN PUTRA';
-  var sub = document.createElement('p'); sub.className = 'intro-sub'; sub.textContent = 'DEVELOPER & FOUNDER';
-  var track = document.createElement('div'); track.className = 'intro-track';
-  var fill = document.createElement('div'); fill.className = 'intro-fill'; track.appendChild(fill);
-  var meta = document.createElement('div'); meta.className = 'intro-meta';
-  var stepTxt = document.createElement('span'); stepTxt.textContent = 'MEMUAT PROFIL...';
-  var pctTxt = document.createElement('span'); pctTxt.textContent = '0%';
-  meta.appendChild(stepTxt); meta.appendChild(pctTxt);
-  var skip = document.createElement('button'); skip.type = 'button'; skip.className = 'intro-skip'; skip.textContent = 'Lewati →';
-  box.appendChild(head); box.appendChild(ttl); box.appendChild(sub); box.appendChild(track); box.appendChild(meta); box.appendChild(skip);
-  intro.appendChild(cTop); intro.appendChild(cBot); intro.appendChild(box);
-  document.documentElement.style.overflow = 'hidden';
-  document.body.appendChild(intro);
-
-  var closed = false, t0 = performance.now(), DUR = 5000;
-  function closeIntro(){
-    if (closed) return; closed = true;
-    intro.classList.add('is-leaving');
-    document.documentElement.style.overflow = '';
-    setTimeout(function(){ if (intro.parentNode) intro.parentNode.removeChild(intro); }, 720);
-  }
-  function tickIntro(now){
-    if (closed) return;
-    var raw = Math.min(1, (now - t0) / 4600);
-    var eased = 1 - Math.pow(1 - raw, 2.2);
-    var pct = Math.round(eased * 100);
-    fill.style.width = pct + '%'; pctTxt.textContent = pct + '%';
-    if (pct >= 85) stepTxt.textContent = 'SIAP MASUK';
-    else if (pct >= 45) stepTxt.textContent = 'MEMUAT HIDZPROJECT...';
-    if (now - t0 >= DUR){ closeIntro(); return; }
+  var intro = document.getElementById('hidzIntro');
+  var fill = document.getElementById('introFill');
+  var stepTxt = document.getElementById('introStep');
+  var pctTxt = document.getElementById('introPct');
+  var skip = document.getElementById('introSkip');
+  if (intro){
+    document.documentElement.style.overflow = 'hidden';
+    var closed = false, t0 = null, DUR = 5000;
+    function closeIntro(){
+      if (closed) return; closed = true;
+      intro.classList.add('is-leaving');
+      document.documentElement.style.overflow = '';
+      setTimeout(function(){ if (intro.parentNode) intro.parentNode.removeChild(intro); }, 720);
+    }
+    function tickIntro(now){
+      if (closed) return;
+      if (t0 === null) t0 = now;
+      var elapsed = now - t0;
+      var raw = Math.min(1, elapsed / 4600);
+      var eased = 1 - Math.pow(1 - raw, 2.2);
+      var pct = Math.round(eased * 100);
+      if (fill) fill.style.width = pct + '%';
+      if (pctTxt) pctTxt.textContent = pct + '%';
+      if (stepTxt){
+        if (pct >= 85) stepTxt.textContent = 'SIAP MASUK';
+        else if (pct >= 45) stepTxt.textContent = 'MEMUAT HIDZPROJECT...';
+      }
+      if (elapsed >= DUR){ closeIntro(); return; }
+      requestAnimationFrame(tickIntro);
+    }
     requestAnimationFrame(tickIntro);
+    setTimeout(closeIntro, 5600);
+    if (skip) skip.addEventListener('click', function(){ tryStart(); closeIntro(); });
   }
-  requestAnimationFrame(tickIntro);
-  skip.addEventListener('click', function(){ tryStart(); closeIntro(); });
   tryStart();
 })();
