@@ -233,48 +233,52 @@
   });
 })();
 (function(){
+  var CDN = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/';
   var DATA = [
-    { n:'HTML5', c:'bahasa', l:'BAHASA', s:'H5', bg:'var(--yellow)', pop:0 },
-    { n:'CSS3', c:'bahasa', l:'BAHASA', s:'CS', bg:'var(--cyan)', pop:0 },
-    { n:'JavaScript', c:'bahasa', l:'BAHASA', s:'JS', bg:'var(--pink)', pop:1 },
-    { n:'TypeScript', c:'bahasa', l:'BAHASA', s:'TS', bg:'var(--cyan)', pop:1 },
-    { n:'PHP', c:'bahasa', l:'BAHASA', s:'PHP', bg:'var(--cream-2)', pop:0 },
-    { n:'Python', c:'bahasa', l:'BAHASA', s:'PY', bg:'var(--yellow)', pop:1 },
-    { n:'Next.js', c:'framework', l:'FRAMEWORK', s:'NX', bg:'var(--cyan)', pop:1 },
-    { n:'React', c:'framework', l:'FRAMEWORK', s:'RC', bg:'var(--pink)', pop:1 },
-    { n:'Express.js', c:'framework', l:'FRAMEWORK', s:'EX', bg:'var(--yellow)', pop:1 },
-    { n:'Tailwind CSS', c:'framework', l:'FRAMEWORK', s:'TW', bg:'var(--cyan)', pop:1 },
-    { n:'jQuery', c:'framework', l:'FRAMEWORK', s:'JQ', bg:'var(--cream-2)', pop:0 },
-    { n:'Bootstrap', c:'framework', l:'FRAMEWORK', s:'BS', bg:'var(--pink)', pop:0 },
-    { n:'Node.js', c:'backend', l:'BACKEND', s:'ND', bg:'var(--yellow)', pop:1 },
-    { n:'MySQL', c:'backend', l:'BACKEND', s:'SQL', bg:'var(--cyan)', pop:0 },
-    { n:'MongoDB', c:'backend', l:'BACKEND', s:'MG', bg:'var(--cream-2)', pop:0 },
-    { n:'Firebase', c:'backend', l:'BACKEND', s:'FB', bg:'var(--yellow)', pop:1 },
-    { n:'Supabase', c:'backend', l:'BACKEND', s:'SB', bg:'var(--pink)', pop:1 },
-    { n:'Vercel', c:'backend', l:'BACKEND', s:'VC', bg:'var(--cyan)', pop:0 }
+    { n:'HTML5', c:'bahasa', l:'BAHASA', s:'H5', ic:'html5/html5-original.svg', pop:0 },
+    { n:'CSS3', c:'bahasa', l:'BAHASA', s:'CS', ic:'css3/css3-original.svg', pop:0 },
+    { n:'JavaScript', c:'bahasa', l:'BAHASA', s:'JS', ic:'javascript/javascript-original.svg', pop:0 },
+    { n:'TypeScript', c:'bahasa', l:'BAHASA', s:'TS', ic:'typescript/typescript-original.svg', pop:1 },
+    { n:'PHP', c:'bahasa', l:'BAHASA', s:'PHP', ic:'php/php-original.svg', pop:0 },
+    { n:'Python', c:'bahasa', l:'BAHASA', s:'PY', ic:'python/python-original.svg', pop:0 },
+    { n:'Next.js', c:'framework', l:'FRAMEWORK', s:'NX', ic:'nextjs/nextjs-original.svg', pop:1 },
+    { n:'React', c:'framework', l:'FRAMEWORK', s:'RC', ic:'react/react-original.svg', pop:1 },
+    { n:'Express.js', c:'framework', l:'FRAMEWORK', s:'EX', ic:'express/express-original.svg', pop:0 },
+    { n:'Tailwind CSS', c:'framework', l:'FRAMEWORK', s:'TW', ic:'tailwindcss/tailwindcss-original.svg', pop:1 },
+    { n:'jQuery', c:'framework', l:'FRAMEWORK', s:'JQ', ic:'jquery/jquery-original.svg', pop:0 },
+    { n:'Bootstrap', c:'framework', l:'FRAMEWORK', s:'BS', ic:'bootstrap/bootstrap-original.svg', pop:0 },
+    { n:'Node.js', c:'backend', l:'BACKEND', s:'ND', ic:'nodejs/nodejs-original.svg', pop:1 },
+    { n:'MySQL', c:'backend', l:'BACKEND', s:'SQL', ic:'mysql/mysql-original.svg', pop:0 },
+    { n:'MongoDB', c:'backend', l:'BACKEND', s:'MG', ic:'mongodb/mongodb-original.svg', pop:0 },
+    { n:'Firebase', c:'backend', l:'BACKEND', s:'FB', ic:'firebase/firebase-plain.svg', pop:1 },
+    { n:'Supabase', c:'backend', l:'BACKEND', s:'SB', ic:'supabase/supabase-original.svg', pop:1 },
+    { n:'Vercel', c:'backend', l:'BACKEND', s:'VC', ic:'vercel/vercel-original.svg', pop:0 }
   ];
-  var stage = document.getElementById('stackStage');
-  var folder = document.getElementById('stackFolder');
-  var hint = document.getElementById('stackFolderHint');
-  var chipsBox = document.getElementById('stackChips');
-  var marquee = document.getElementById('stackMarqueeTrack');
-  var grid = document.getElementById('stackGrid');
+  var stage = document.getElementById('stackStage'), folder = document.getElementById('stackFolder'), hint = document.getElementById('stackFolderHint');
+  var chipsBox = document.getElementById('stackChips'), marquee = document.getElementById('stackMarqueeTrack'), grid = document.getElementById('stackGrid');
   var tabs = document.querySelectorAll('[data-stack-cat]');
   if (!stage || !folder || !grid) return;
-  var arc = [
-    [-165,-42,-7],[-118,-98,-4],[-46,-126,-2],[46,-126,2],[118,-98,4],
-    [165,-42,7],[-148,14,-5],[-72,-66,-3],[72,-66,3],[148,14,5]
-  ];
+  function makeLogoImg(item, cls, fallbackParent){
+    var img = document.createElement('img');
+    img.className = cls; img.alt = item.n; img.loading = 'lazy';
+    img.src = CDN + item.ic;
+    img.addEventListener('error', function(){
+      img.remove();
+      if (fallbackParent && !fallbackParent.textContent) fallbackParent.textContent = item.s;
+    });
+    return img;
+  }
+
+  var arc = [[-64,-18,-3],[64,-18,3],[-66,-68,-2],[66,-68,2],[-62,-118,-3],[62,-118,3],[0,-166,0]];
   var popped = DATA.filter(function(item){ return item.pop; });
 
   function layoutChips(){
-    var w = stage.clientWidth || 320;
-    var scale = Math.min(1, Math.max(0.56, (w - 90) / 340));
-    var nodes = chipsBox.querySelectorAll('.stack-chip');
-    nodes.forEach(function(el, i){
+    var w = stage.clientWidth || 268;
+    var scaleX = Math.min(1.55, Math.max(0.88, (w - 30) / 250));
+    chipsBox.querySelectorAll('.stack-chip').forEach(function(el, i){
       var p = arc[i % arc.length];
-      el.style.setProperty('--tx', (p[0] * scale).toFixed(0) + 'px');
-      el.style.setProperty('--ty', (p[1] * Math.max(0.82, scale)).toFixed(0) + 'px');
+      el.style.setProperty('--tx', (p[0] * scaleX).toFixed(0) + 'px');
+      el.style.setProperty('--ty', p[1] + 'px');
       el.style.setProperty('--tr', p[2] + 'deg');
     });
   }
@@ -286,18 +290,16 @@
       var card = document.createElement('div');
       card.className = 'stack-card' + (flashName === item.n ? ' is-flash' : '');
       card.style.animationDelay = Math.min(i * 22, 220) + 'ms';
-      var mark = document.createElement('span');
-      mark.className = 'stack-mark'; mark.style.background = item.bg; mark.textContent = item.s;
+      var mark = document.createElement('span'); mark.className = 'stack-mark';
+      mark.appendChild(makeLogoImg(item, 'stack-mark-img', mark));
       var meta = document.createElement('div'); meta.className = 'stack-meta';
       var nm = document.createElement('div'); nm.className = 'stack-name'; nm.textContent = item.n;
       var sub = document.createElement('div'); sub.className = 'stack-sub'; sub.textContent = item.l;
-      meta.appendChild(nm); meta.appendChild(sub);
-      card.appendChild(mark); card.appendChild(meta);
+      meta.appendChild(nm); meta.appendChild(sub); card.appendChild(mark); card.appendChild(meta);
       frag.appendChild(card);
     });
     grid.textContent = ''; grid.appendChild(frag);
   }
-
   if (chipsBox){
     var cf = document.createDocumentFragment();
     popped.forEach(function(item, i){
@@ -306,8 +308,8 @@
       b.style.setProperty('--dl', (-i * 0.45) + 's');
       b.style.setProperty('--bd', (3.4 + (i % 4) * 0.35) + 's');
       b.style.transitionDelay = (i * 26) + 'ms';
-      var d = document.createElement('span'); d.className = 'chip-dot'; d.style.setProperty('--cc', item.bg);
-      b.appendChild(d); b.appendChild(document.createTextNode(item.n));
+      b.appendChild(makeLogoImg(item, 'stack-chip-ico', null));
+      b.appendChild(document.createTextNode(item.n));
       b.addEventListener('click', function(e){
         e.stopPropagation();
         tabs.forEach(function(t){
@@ -328,8 +330,8 @@
     var mf = document.createDocumentFragment();
     DATA.concat(DATA).forEach(function(item){
       var p = document.createElement('span'); p.className = 'marquee-pill';
-      var d = document.createElement('span'); d.className = 'chip-dot'; d.style.setProperty('--cc', item.bg);
-      p.appendChild(d); p.appendChild(document.createTextNode(item.n));
+      p.appendChild(makeLogoImg(item, 'marquee-ico', null));
+      p.appendChild(document.createTextNode(item.n));
       mf.appendChild(p);
     });
     marquee.appendChild(mf);
