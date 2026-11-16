@@ -95,3 +95,5 @@
   .legal-nav{ flex-direction:row; }
   .legal-tab{ text-align:center; font-size:.84rem; }
 }
+.mobile-nav.is-open{ max-height:460px; }
+#privasi{ scroll-margin-top:86px; }
