@@ -60,3 +60,20 @@
 .id-fspec-row span:last-child{ font-weight:700; text-align:right; color:var(--ink); }
 .id-fspec-row strong{ color:var(--violet); font-weight:800; }
 .id-back-specs{ border-radius:12px; padding:10px 13px; gap:7px; }
+.id-card-rig{ width:min(314px, 84vw); aspect-ratio:314 / 496; }
+.id-front-stage{ min-height:175px; }
+.id-front-specs{
+  margin:10px 12px 0; padding:8px 12px; background:var(--cream-2); border:2.5px solid var(--ink);
+  border-radius:10px; box-shadow:3px 3px 0 var(--ink); display:flex; flex-direction:column; gap:0;
+}
+.id-fspec-row{
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  padding:5px 0; border-bottom:1.5px dashed rgba(21,19,15,.18); font-size:.76rem; line-height:1.25;
+}
+.id-fspec-row:first-child{ padding-top:0; }
+.id-fspec-row:last-child{ border-bottom:none; padding-bottom:0; }
+.id-fspec-row span:first-child{ font-family:var(--font-mono); font-size:.66rem; font-weight:700; opacity:.72; flex-shrink:0; }
+.id-fspec-row span:last-child{ font-weight:700; text-align:right; color:var(--ink); }
+.id-fspec-row strong{ color:var(--violet); font-weight:800; }
+.id-spec-row{ padding:3px 0; border-bottom:1px dashed rgba(255,246,229,.14); }
+.id-spec-row:last-child{ border-bottom:none; padding-bottom:0; }
