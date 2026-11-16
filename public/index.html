@@ -7,7 +7,7 @@
 <meta name="description" content="Syahid Subhan Putra (Hidz) adalah developer website asal Indonesia, pembuat HidzProject, ekosistem belasan aplikasi web yang dikode manual dari nol.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Boogaloo&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#FFC93C">
@@ -92,7 +92,7 @@
   a{ color:inherit; }
   h1,h2,h3{ font-family:'Orbitron',sans-serif; line-height:1.15; letter-spacing:.01em; }
   .eyebrow{
-    font-family:'Boogaloo',cursive;
+    font-family:'JetBrains Mono',monospace;
     font-size:1.05rem;
     letter-spacing:.08em;
     color:var(--violet);
@@ -298,7 +298,7 @@
   }
   .phase-controls{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
   .phase-badge{
-    font-family:'Boogaloo',cursive; font-size:.95rem; letter-spacing:.08em;
+    font-family:'JetBrains Mono',monospace; font-size:.95rem; letter-spacing:.08em;
     background:var(--cream); border:var(--border-w) solid var(--ink);
     box-shadow:4px 4px 0 var(--ink);
     padding:5px 12px;
@@ -361,7 +361,7 @@
   .scroll-cue{
     align-self:center;
     display:flex; flex-direction:column; align-items:center; gap:6px;
-    font-family:'Boogaloo',cursive; font-size:.8rem; letter-spacing:.1em;
+    font-family:'JetBrains Mono',monospace; font-size:.8rem; letter-spacing:.1em;
     color:var(--ink); opacity:.75;
   }
   .scroll-cue .arrow{
@@ -433,7 +433,7 @@
   }
   .cam-bar .dot{ width:9px; height:9px; border-radius:50%; border:2px solid var(--ink); background:var(--cream); }
   .cam-label{
-    margin-left:auto; font-family:'Boogaloo',cursive; letter-spacing:.08em;
+    margin-left:auto; font-family:'JetBrains Mono',monospace; letter-spacing:.08em;
     font-size:.78rem; color:var(--pink); display:flex; align-items:center; gap:5px;
   }
   .cam-label::before{
@@ -455,7 +455,7 @@
   .skills-group{ margin-top:20px; }
   .skills-group:first-of-type{ margin-top:22px; }
   .skills-label{
-    font-family:'Boogaloo',cursive; font-size:.78rem; letter-spacing:.1em;
+    font-family:'JetBrains Mono',monospace; font-size:.78rem; letter-spacing:.1em;
     color:var(--violet); margin-bottom:8px;
   }
   .skills-row{ display:flex; flex-wrap:wrap; gap:10px; }
@@ -568,6 +568,8 @@
   .partner-card p{ margin-top:2px; font-size:.9rem; opacity:.85; }
   .partner-info .btn{ margin-top:16px; }
 </style>
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="stylesheet" href="/bio-addons.css">
 </head>
 <body>
 
@@ -751,6 +753,86 @@
     </div>
   </section>
 
+<section class="id-stage-section" id="identitas">
+  <div class="id-stage-inner">
+    <div class="id-stage-header" data-reveal>
+      <span class="id-pill">KARTU IDENTITAS &amp; PROFIL 3D</span>
+      <h2>Kartu Pengenal Interaktif</h2>
+      <p class="id-stage-sub">Tarik kartu ke mana saja hingga keluar layar, swipe kanan atau kiri untuk membalik, atau lontarkan agar berputar.</p>
+    </div>
+    <div class="id-stage" id="idStage">
+      <div class="id-lanyard-anchor" aria-hidden="true"><span></span><span></span></div>
+      <div class="id-anchor-point" aria-hidden="true">
+        <svg class="id-lanyard-svg" id="idLanyardSvg" width="2" height="2" viewBox="-1 -1 2 2">
+          <path id="idStrapOutline" d="M 0 0 Q 0 36 0 70" fill="none" stroke="#15130F" stroke-width="26" stroke-linecap="round"/>
+          <path id="idStrapBody" d="M 0 0 Q 0 36 0 70" fill="none" stroke="#221E18" stroke-width="20" stroke-linecap="round"/>
+          <path id="idStrapStripe" d="M 0 0 Q 0 36 0 70" fill="none" stroke="#FFC93C" stroke-width="6" stroke-dasharray="10 10"/>
+          <g id="idClasp" transform="translate(0, 70)">
+            <rect x="-15" y="-12" width="30" height="14" rx="3" fill="#FFC93C" stroke="#15130F" stroke-width="3"/>
+            <circle cx="0" cy="4" r="7" fill="none" stroke="#15130F" stroke-width="3"/>
+            <circle cx="0" cy="4" r="3.5" fill="#FFF6E5"/>
+          </g>
+        </svg>
+      </div>
+      <div class="id-card-rig" id="idCardRig" data-reveal>
+        <div class="id-card-body" id="idCardBody" role="button" tabindex="0">
+          <div class="id-face id-face-front">
+            <div class="id-glare"></div>
+            <div class="id-slot-row"><span class="id-slot-hole"></span></div>
+            <div class="id-front-topmeta">
+              <span>HIDZPROJECT // PORTAL</span>
+              <span class="id-live-chip"><span class="id-live-dot" id="cardLiveDot"></span><span id="cardLiveText">ONLINE</span></span>
+            </div>
+            <div class="id-front-name">SYAHID SUBHAN PUTRA</div>
+            <div class="id-front-handle">@HIDZ · INDONESIA</div>
+            <div class="id-front-stage">
+              <div class="id-front-slash"></div>
+              <span class="id-tech-tag id-tag-1">Next.js</span>
+              <span class="id-tech-tag id-tag-2">React</span>
+              <span class="id-tech-tag id-tag-3">Node.js</span>
+              <span class="id-tech-tag id-tag-4">Firebase</span>
+              <img class="id-front-photo" data-fallback-src="https://www.gobox.my.id/file/KGf7WnxZYzAv.jpg" src="https://www.gobox.my.id/file/5JhzJZgCm54T.jpg" alt="Foto portofolio Syahid Subhan Putra">
+            </div>
+            <div class="id-front-banner">
+              <span class="id-banner-sub">THE WEBSITE</span>
+              <span class="id-banner-role">DEVELOPER</span>
+            </div>
+          </div>
+          <div class="id-face id-face-back">
+            <div class="id-glare"></div>
+            <div class="id-slot-row"><span class="id-slot-hole"></span></div>
+            <div class="id-back-inner">
+              <div class="id-back-avatar-box"><img data-fallback-src="https://www.gobox.my.id/file/KGf7WnxZYzAv.jpg" src="https://www.gobox.my.id/file/5JhzJZgCm54T.jpg" alt="Foto ID Syahid Subhan Putra"></div>
+              <span class="id-back-serial">ID: HIDZ-DEV-01</span>
+              <div class="id-back-titlegroup">
+                <h3>Syahid Subhan Putra</h3>
+                <p class="id-back-alias">ALIAS: HIDZ</p>
+                <p class="id-back-role">WEB DEVELOPER &amp; FOUNDER HIDZPROJECT</p>
+              </div>
+              <div class="id-back-specs">
+                <div class="id-spec-row"><span>Specialty:</span><span><strong>Fullstack Web &amp; Tools</strong></span></div>
+                <div class="id-spec-row"><span>Age / Status:</span><span id="idCardAge">14 Years Old</span></div>
+                <div class="id-spec-row"><span>Ecosystem:</span><span id="idCardProjects">13+ Web Apps</span></div>
+                <div class="id-spec-row"><span>Live Server:</span><span id="idCardStatus">ONLINE · 24/7</span></div>
+                <div class="id-spec-row"><span>Location:</span><span>Indonesia</span></div>
+              </div>
+              <div class="id-back-footer">
+                <span class="id-back-foot-txt">FULLSTACK &amp; TOOLS ENG</span>
+                <svg class="id-qr-badge" viewBox="0 0 24 24" fill="#15130F" aria-hidden="true">
+                  <path d="M2 2h7v7H2zm1.5 1.5v4h4v-4zm1 1h2v2h-2zM15 2h7v7h-7zm1.5 1.5v4h4v-4zm1 1h2v2h-2zM2 15h7v7H2zm1.5 1.5v4h4v-4zm1 1h2v2h-2zM11 2h2v2h-2zm0 4h2v2h-2zM2 11h2v2H2zm4 0h4v2H6zm6-1h4v4h-4zm6 1h4v2h-4zm-7 5h3v2h-3zm5-1h2v4h-2zm4 1h2v6h-2zm-9 4h7v2h-7z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="id-controls-bar" data-reveal>
+        <button type="button" class="btn btn-flip" id="idFlipBtn">BALIK KARTU ↻</button>
+        <span class="id-hint-badge">SWIPE KANAN/KIRI · TARIK · LONTARKAN</span>
+      </div>
+    </div>
+  </div>
+</section>
   <!-- ============ ABOUT ============ -->
   <section class="panel-section" id="tentang">
     <div class="panel about-panel about-grid">
@@ -928,6 +1010,18 @@
       <p class="eyebrow" data-reveal>SIAP KOLABORASI?</p>
       <h2 data-reveal>Ngobrolin project bareng, yuk.</h2>
       <a class="btn btn-wa" data-reveal href="https://wa.me/6289679177876" target="_blank" rel="noopener">WhatsApp</a>
+      <section class="legal-box" id="privasi" aria-labelledby="legalTitle" data-reveal>
+        <div class="legal-header">
+          <div><p class="eyebrow" style="margin-bottom:2px;">LEGAL &amp; TRANSPARANSI</p><h3 id="legalTitle">Kebijakan &amp; Privasi</h3></div>
+          <span class="legal-updated" id="legalYearBadge">BERLAKU: 2026</span>
+        </div>
+        <div class="legal-grid">
+          <div class="legal-item"><h4>01 // DATA &amp; PENYIMPANAN LOKAL</h4><p>Portofolio ini tidak mengumpulkan data pribadi sensitif, tidak memakai pelacak iklan, dan tidak menjual data pengunjung. Penyimpanan lokal hanya dipakai untuk cache daftar project agar lebih cepat.</p></div>
+          <div class="legal-item"><h4>02 // LAYANAN PIHAK KETIGA</h4><p>Situs memuat tipografi dari Google Fonts, status layanan real-time melalui Firebase Realtime Database, serta tautan eksternal menuju HidzProject, GitHub, dan WhatsApp secara sukarela.</p></div>
+          <div class="legal-item"><h4>03 // HAK KEKAYAAN INTELEKTUAL</h4><p>Seluruh kode sumber, desain antarmuka, aset visual, serta ekosistem aplikasi HidzProject merupakan karya mandiri Syahid Subhan Putra dan dilindungi ketentuan hak cipta.</p></div>
+          <div class="legal-item"><h4>04 // KONTAK &amp; PEMBARUAN</h4><p>Kebijakan ini dapat diperbarui sewaktu-waktu seiring pengembangan fitur. Pertanyaan privasi atau kolaborasi dapat diajukan langsung lewat kontak WhatsApp resmi pada halaman ini.</p></div>
+        </div>
+      </section>
       <p class="footer-credit">© 2026 Syahid Subhan Putra — HidzProject. Dibangun manual, bukan template.</p>
     </div>
   </footer>
@@ -1570,5 +1664,6 @@
 })();
 </script>
 
+<script src="/bio-addons.js"></script>
 </body>
 </html>
