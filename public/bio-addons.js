@@ -235,15 +235,15 @@
 (function(){
   var CDN = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/';
   var DATA = [
-    { n:'HTML5', c:'bahasa', l:'BAHASA', s:'H5', ic:'html5/html5-original.svg', pop:0 },
-    { n:'CSS3', c:'bahasa', l:'BAHASA', s:'CS', ic:'css3/css3-original.svg', pop:0 },
-    { n:'JavaScript', c:'bahasa', l:'BAHASA', s:'JS', ic:'javascript/javascript-original.svg', pop:0 },
+    { n:'HTML5', c:'bahasa', l:'BAHASA', s:'H5', ic:'html5/html5-original.svg', pop:1 },
+    { n:'CSS3', c:'bahasa', l:'BAHASA', s:'CS', ic:'css3/css3-original.svg', pop:1 },
+    { n:'JavaScript', c:'bahasa', l:'BAHASA', s:'JS', ic:'javascript/javascript-original.svg', pop:1 },
     { n:'TypeScript', c:'bahasa', l:'BAHASA', s:'TS', ic:'typescript/typescript-original.svg', pop:1 },
     { n:'PHP', c:'bahasa', l:'BAHASA', s:'PHP', ic:'php/php-original.svg', pop:0 },
-    { n:'Python', c:'bahasa', l:'BAHASA', s:'PY', ic:'python/python-original.svg', pop:0 },
+    { n:'Python', c:'bahasa', l:'BAHASA', s:'PY', ic:'python/python-original.svg', pop:1 },
     { n:'Next.js', c:'framework', l:'FRAMEWORK', s:'NX', ic:'nextjs/nextjs-original.svg', pop:1 },
     { n:'React', c:'framework', l:'FRAMEWORK', s:'RC', ic:'react/react-original.svg', pop:1 },
-    { n:'Express.js', c:'framework', l:'FRAMEWORK', s:'EX', ic:'express/express-original.svg', pop:0 },
+    { n:'Express.js', c:'framework', l:'FRAMEWORK', s:'EX', ic:'express/express-original.svg', pop:1 },
     { n:'Tailwind CSS', c:'framework', l:'FRAMEWORK', s:'TW', ic:'tailwindcss/tailwindcss-original.svg', pop:1 },
     { n:'jQuery', c:'framework', l:'FRAMEWORK', s:'JQ', ic:'jquery/jquery-original.svg', pop:0 },
     { n:'Bootstrap', c:'framework', l:'FRAMEWORK', s:'BS', ic:'bootstrap/bootstrap-original.svg', pop:0 },
@@ -258,23 +258,19 @@
   var chipsBox = document.getElementById('stackChips'), marquee = document.getElementById('stackMarqueeTrack'), grid = document.getElementById('stackGrid');
   var tabs = document.querySelectorAll('[data-stack-cat]');
   if (!stage || !folder || !grid) return;
+
   function makeLogoImg(item, cls, fallbackParent){
-    var img = document.createElement('img');
-    img.className = cls; img.alt = item.n; img.loading = 'lazy';
-    img.src = CDN + item.ic;
-    img.addEventListener('error', function(){
-      img.remove();
-      if (fallbackParent && !fallbackParent.textContent) fallbackParent.textContent = item.s;
-    });
+    var img = document.createElement('img'); img.className = cls; img.alt = item.n; img.loading = 'lazy'; img.src = CDN + item.ic;
+    img.addEventListener('error', function(){ img.remove(); if (fallbackParent && !fallbackParent.textContent) fallbackParent.textContent = item.s; });
     return img;
   }
 
-  var arc = [[-64,-18,-3],[64,-18,3],[-66,-68,-2],[66,-68,2],[-62,-118,-3],[62,-118,3],[0,-166,0]];
+  var arc = [[-72,-16,-3],[0,-26,0],[72,-16,3],[-58,-62,-2],[58,-62,2],[-64,-104,-3],[64,-104,3],[-54,-146,-2],[62,-146,2],[-72,-188,-3],[0,-196,0],[72,-188,3]];
   var popped = DATA.filter(function(item){ return item.pop; });
 
   function layoutChips(){
     var w = stage.clientWidth || 268;
-    var scaleX = Math.min(1.55, Math.max(0.88, (w - 30) / 250));
+    var scaleX = Math.min(1.55, Math.max(0.86, (w - 30) / 255));
     chipsBox.querySelectorAll('.stack-chip').forEach(function(el, i){
       var p = arc[i % arc.length];
       el.style.setProperty('--tx', (p[0] * scaleX).toFixed(0) + 'px');
@@ -282,7 +278,6 @@
       el.style.setProperty('--tr', p[2] + 'deg');
     });
   }
-
   function renderStack(cat, flashName){
     var frag = document.createDocumentFragment();
     var list = cat === 'all' ? DATA : DATA.filter(function(x){ return x.c === cat; });
@@ -300,38 +295,29 @@
     });
     grid.textContent = ''; grid.appendChild(frag);
   }
+
   if (chipsBox){
     var cf = document.createDocumentFragment();
     popped.forEach(function(item, i){
-      var b = document.createElement('button');
-      b.type = 'button'; b.className = 'stack-chip';
-      b.style.setProperty('--dl', (-i * 0.45) + 's');
-      b.style.setProperty('--bd', (3.4 + (i % 4) * 0.35) + 's');
-      b.style.transitionDelay = (i * 26) + 'ms';
-      b.appendChild(makeLogoImg(item, 'stack-chip-ico', null));
-      b.appendChild(document.createTextNode(item.n));
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'stack-chip';
+      b.style.setProperty('--dl', (-i * 0.38) + 's'); b.style.setProperty('--bd', (3.3 + (i % 4) * 0.35) + 's');
+      b.style.transitionDelay = (i * 22) + 'ms';
+      b.appendChild(makeLogoImg(item, 'stack-chip-ico', null)); b.appendChild(document.createTextNode(item.n));
       b.addEventListener('click', function(e){
         e.stopPropagation();
-        tabs.forEach(function(t){
-          var on = t.getAttribute('data-stack-cat') === item.c;
-          t.classList.toggle('is-active', on);
-          t.setAttribute('aria-selected', on ? 'true' : 'false');
-        });
+        tabs.forEach(function(t){ var on = t.getAttribute('data-stack-cat') === item.c; t.classList.toggle('is-active', on); t.setAttribute('aria-selected', on ? 'true' : 'false'); });
         renderStack(item.c, item.n);
       });
       cf.appendChild(b);
     });
-    chipsBox.appendChild(cf);
-    layoutChips();
-    window.addEventListener('resize', layoutChips);
+    chipsBox.appendChild(cf); layoutChips(); window.addEventListener('resize', layoutChips);
   }
 
   if (marquee){
     var mf = document.createDocumentFragment();
     DATA.concat(DATA).forEach(function(item){
       var p = document.createElement('span'); p.className = 'marquee-pill';
-      p.appendChild(makeLogoImg(item, 'marquee-ico', null));
-      p.appendChild(document.createTextNode(item.n));
+      p.appendChild(makeLogoImg(item, 'marquee-ico', null)); p.appendChild(document.createTextNode(item.n));
       mf.appendChild(p);
     });
     marquee.appendChild(mf);
@@ -347,11 +333,7 @@
   tabs.forEach(function(tab){
     tab.addEventListener('click', function(){
       var cat = tab.getAttribute('data-stack-cat');
-      tabs.forEach(function(t){
-        var on = t === tab;
-        t.classList.toggle('is-active', on);
-        t.setAttribute('aria-selected', on ? 'true' : 'false');
-      });
+      tabs.forEach(function(t){ var on = t === tab; t.classList.toggle('is-active', on); t.setAttribute('aria-selected', on ? 'true' : 'false'); });
       renderStack(cat);
     });
   });
@@ -359,86 +341,53 @@
   renderStack('all');
 })();
 (function(){
+  if (document.getElementById('hidzBgmBtn')) return;
   var SRC = 'https://audio.jukehost.co.uk/01a18d50-31e2-71ba-b7be-01326924c3fa';
   var audio = document.createElement('audio');
-  audio.src = SRC; audio.loop = true; audio.preload = 'auto'; audio.volume = 0.45;
-  audio.setAttribute('playsinline', '');
-
+  audio.src = SRC; audio.loop = true; audio.preload = 'auto'; audio.volume = 0.45; audio.setAttribute('playsinline', '');
   var btn = document.createElement('button');
-  btn.type = 'button'; btn.className = 'bgm-btn';
-  btn.setAttribute('aria-label', 'Putar atau jeda musik latar');
-  btn.setAttribute('aria-pressed', 'false');
-
+  btn.id = 'hidzBgmBtn'; btn.type = 'button'; btn.className = 'bgm-btn';
+  btn.setAttribute('aria-label', 'Putar atau jeda musik latar'); btn.setAttribute('aria-pressed', 'false');
   var bars = document.createElement('span'); bars.className = 'bgm-bars'; bars.setAttribute('aria-hidden', 'true');
   for (var i = 0; i < 3; i++) bars.appendChild(document.createElement('span'));
-  var lbl = document.createElement('span'); lbl.textContent = 'MUSIC';
+  var lbl = document.createElement('span'); lbl.textContent = 'PLAY';
   btn.appendChild(bars); btn.appendChild(lbl);
-
-  document.body.appendChild(audio);
-  document.body.appendChild(btn);
+  document.body.appendChild(audio); document.body.appendChild(btn);
 
   var userPaused = false, fadeRaf = null, unlocked = false;
-
   function syncBtn(){
     var playing = !audio.paused;
     btn.classList.toggle('is-playing', playing);
     btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
     lbl.textContent = playing ? 'ON' : (userPaused ? 'OFF' : 'PLAY');
   }
-
   function fadeIn(){
     if (fadeRaf) cancelAnimationFrame(fadeRaf);
     var start = performance.now();
     function tick(now){
       var p = Math.min(1, (now - start) / 1100);
       audio.volume = 0.05 + p * 0.40;
-      if (p < 1 && !audio.paused) fadeRaf = requestAnimationFrame(tick);
-      else fadeRaf = null;
+      if (p < 1 && !audio.paused) fadeRaf = requestAnimationFrame(tick); else fadeRaf = null;
     }
     fadeRaf = requestAnimationFrame(tick);
   }
   function removeUnlock(){
-    if (unlocked) return;
-    unlocked = true;
-    ['pointerdown', 'touchstart', 'keydown'].forEach(function(ev){
-      window.removeEventListener(ev, onFirstGesture, true);
-    });
+    if (unlocked) return; unlocked = true;
+    ['pointerdown', 'touchstart', 'keydown'].forEach(function(ev){ window.removeEventListener(ev, onFirstGesture, true); });
   }
-
   function tryStart(){
     if (userPaused || !audio.paused) return;
     audio.volume = 0.05;
     var p = audio.play();
-    if (p && typeof p.then === 'function'){
-      p.then(function(){ removeUnlock(); fadeIn(); syncBtn(); }).catch(function(){ syncBtn(); });
-    }
+    if (p && typeof p.then === 'function') p.then(function(){ removeUnlock(); fadeIn(); syncBtn(); }).catch(function(){ syncBtn(); });
   }
-
-  function onFirstGesture(e){
-    if (e.target && (e.target === btn || btn.contains(e.target))) return;
-    if (!userPaused && audio.paused) tryStart();
-  }
-
-  ['pointerdown', 'touchstart', 'keydown'].forEach(function(ev){
-    window.addEventListener(ev, onFirstGesture, { capture:true, passive:true });
-  });
-
+  function onFirstGesture(e){ if (!e.target || (e.target !== btn && !btn.contains(e.target))) if (!userPaused && audio.paused) tryStart(); }
+  ['pointerdown', 'touchstart', 'keydown'].forEach(function(ev){ window.addEventListener(ev, onFirstGesture, { capture:true, passive:true }); });
   btn.addEventListener('click', function(){
-    if (audio.paused){
-      userPaused = false;
-      removeUnlock();
-      tryStart();
-    } else {
-      userPaused = true;
-      removeUnlock();
-      if (fadeRaf) cancelAnimationFrame(fadeRaf);
-      audio.pause();
-    }
+    if (audio.paused){ userPaused = false; removeUnlock(); tryStart(); }
+    else { userPaused = true; removeUnlock(); if (fadeRaf) cancelAnimationFrame(fadeRaf); audio.pause(); }
     syncBtn();
   });
-
-  audio.addEventListener('play', syncBtn);
-  audio.addEventListener('pause', syncBtn);
-  audio.addEventListener('error', function(){ btn.hidden = true; });
+  audio.addEventListener('play', syncBtn); audio.addEventListener('pause', syncBtn);
   tryStart();
 })();
