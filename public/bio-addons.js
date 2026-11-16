@@ -371,6 +371,39 @@
     actions.appendChild(btn); actions.appendChild(navToggle);
   }
   document.body.appendChild(audio);
+  var userPaused = false, fadeRaf = null, dropTimer = null, unlocked = false;
+  var GLYPHS = ['\u266A', '\u266B', '\u2669'];
+  var COLORS = ['var(--ink)', 'var(--pink)', 'var(--violet)', 'var(--cyan)'];
+
+  function spawnNote(){
+    if (audio.paused || document.visibilityState === 'hidden') return;
+    if (fallWrap.childElementCount > 6) return;
+    var n = document.createElement('span');
+    n.className = 'bgm-drop-note';
+    n.textContent = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+    n.style.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    n.style.fontSize = (11 + Math.floor(Math.random() * 5)) + 'px';
+    n.style.setProperty('--nx1', ((Math.random() - 0.5) * 14).toFixed(1) + 'px');
+    n.style.setProperty('--nx2', ((Math.random() - 0.5) * 24).toFixed(1) + 'px');
+    n.style.setProperty('--nr1', ((Math.random() - 0.5) * 20).toFixed(0) + 'deg');
+    n.style.setProperty('--nr2', ((Math.random() - 0.5) * 44).toFixed(0) + 'deg');
+    n.style.setProperty('--fd', (1.15 + Math.random() * 0.45).toFixed(2) + 's');
+    n.addEventListener('animationend', function(){ if (n.parentNode) n.parentNode.removeChild(n); });
+    fallWrap.appendChild(n);
+    setTimeout(function(){ if (n.parentNode) n.parentNode.removeChild(n); }, 1800);
+  }
+
+  function syncBtn(){
+    var playing = !audio.paused;
+    btn.classList.toggle('is-playing', playing);
+    btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    if (playing){
+      if (!dropTimer){ spawnNote(); dropTimer = setInterval(spawnNote, 420); }
+    } else {
+      if (dropTimer){ clearInterval(dropTimer); dropTimer = null; }
+      fallWrap.textContent = '';
+    }
+  }
   function fadeIn(){
     if (fadeRaf) cancelAnimationFrame(fadeRaf);
     var start = performance.now();
@@ -404,7 +437,6 @@
   });
   audio.addEventListener('play', syncBtn); audio.addEventListener('pause', syncBtn);
 
-  // Intro Memuat 5 Detik (Split Curtain)
   var intro = document.createElement('div'); intro.id = 'hidzIntro'; intro.className = 'hidz-intro';
   var cTop = document.createElement('div'); cTop.className = 'intro-curtain intro-curtain-top';
   var cBot = document.createElement('div'); cBot.className = 'intro-curtain intro-curtain-bot';
@@ -439,8 +471,7 @@
     var raw = Math.min(1, (now - t0) / 4600);
     var eased = 1 - Math.pow(1 - raw, 2.2);
     var pct = Math.round(eased * 100);
-    fill.style.width = pct + '%';
-    pctTxt.textContent = pct + '%';
+    fill.style.width = pct + '%'; pctTxt.textContent = pct + '%';
     if (pct >= 85) stepTxt.textContent = 'SIAP MASUK';
     else if (pct >= 45) stepTxt.textContent = 'MEMUAT HIDZPROJECT...';
     if (now - t0 >= DUR){ closeIntro(); return; }

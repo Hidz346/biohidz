@@ -174,7 +174,6 @@
   0%{ opacity:0; transform:translate(-50%,-4px) scale(.65) rotate(0deg); }
   20%{ opacity:1; transform:translate(calc(-50% + var(--nx1,3px)), 12px) scale(1) rotate(var(--nr1,-8deg)); }
   100%{ opacity:0; transform:translate(calc(-50% + var(--nx2,-6px)), 66px) scale(.85) rotate(var(--nr2,16deg)); }
-}
 .hidz-intro{ position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center; padding:24px; pointer-events:auto; }
 .intro-curtain{
   position:absolute; left:0; right:0; height:50%;
