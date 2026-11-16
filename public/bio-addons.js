@@ -357,11 +357,11 @@
   stem.setAttribute('d', 'M9 17V5l10-2v12'); stem.setAttribute('fill', 'none'); stem.setAttribute('stroke', 'currentColor'); stem.setAttribute('stroke-width', '2.4'); stem.setAttribute('stroke-linecap', 'round'); stem.setAttribute('stroke-linejoin', 'round');
   var c1 = document.createElementNS(NS, 'circle'); c1.setAttribute('cx', '6.5'); c1.setAttribute('cy', '17.5'); c1.setAttribute('r', '2.6'); c1.setAttribute('fill', 'currentColor');
   var c2 = document.createElementNS(NS, 'circle'); c2.setAttribute('cx', '16.5'); c2.setAttribute('cy', '15.5'); c2.setAttribute('r', '2.6'); c2.setAttribute('fill', 'currentColor');
-  var slash = document.createElementNS(NS, 'line');
-  slash.setAttribute('class', 'bgm-slash'); slash.setAttribute('x1', '4'); slash.setAttribute('y1', '4'); slash.setAttribute('x2', '20'); slash.setAttribute('y2', '20');
-  slash.setAttribute('stroke', '#FF5D8F'); slash.setAttribute('stroke-width', '2.6'); slash.setAttribute('stroke-linecap', 'round');
-  svg.appendChild(stem); svg.appendChild(c1); svg.appendChild(c2); svg.appendChild(slash);
-  btn.appendChild(svg);
+  svg.appendChild(stem); svg.appendChild(c1); svg.appendChild(c2);
+
+  var fallWrap = document.createElement('span');
+  fallWrap.className = 'bgm-fall-wrap'; fallWrap.setAttribute('aria-hidden', 'true');
+  btn.appendChild(svg); btn.appendChild(fallWrap);
 
   var navInner = document.querySelector('.nav-inner');
   var navToggle = document.getElementById('navToggle');
@@ -371,12 +371,6 @@
     actions.appendChild(btn); actions.appendChild(navToggle);
   }
   document.body.appendChild(audio);
-  var userPaused = false, fadeRaf = null;
-  function syncBtn(){
-    var playing = !audio.paused;
-    btn.classList.toggle('is-playing', playing);
-    btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
-  }
   function fadeIn(){
     if (fadeRaf) cancelAnimationFrame(fadeRaf);
     var start = performance.now();
@@ -387,45 +381,72 @@
     }
     fadeRaf = requestAnimationFrame(tick);
   }
-  function playAudio(){
+  function removeUnlock(){
+    if (unlocked) return; unlocked = true;
+    ['click', 'touchend', 'keydown'].forEach(function(ev){ window.removeEventListener(ev, onFirstGesture, true); });
+  }
+  function tryStart(){
     if (userPaused || !audio.paused) return;
     audio.volume = 0.05;
     var p = audio.play();
-    if (p && typeof p.then === 'function') p.then(function(){ fadeIn(); syncBtn(); }).catch(function(){ syncBtn(); });
+    if (p && typeof p.then === 'function') p.then(function(){ removeUnlock(); fadeIn(); syncBtn(); }).catch(function(){ syncBtn(); });
   }
+  function onFirstGesture(e){
+    if (e.target && (e.target === btn || btn.contains(e.target))) return;
+    if (!userPaused && audio.paused) tryStart();
+  }
+  ['click', 'touchend', 'keydown'].forEach(function(ev){ window.addEventListener(ev, onFirstGesture, { capture:true, passive:true }); });
 
   btn.addEventListener('click', function(){
-    if (audio.paused){ userPaused = false; playAudio(); }
-    else { userPaused = true; if (fadeRaf) cancelAnimationFrame(fadeRaf); audio.pause(); }
+    if (audio.paused){ userPaused = false; removeUnlock(); tryStart(); }
+    else { userPaused = true; removeUnlock(); if (fadeRaf) cancelAnimationFrame(fadeRaf); audio.pause(); }
     syncBtn();
   });
   audio.addEventListener('play', syncBtn); audio.addEventListener('pause', syncBtn);
 
-  // Intro Pembuka
+  // Intro Memuat 5 Detik (Split Curtain)
   var intro = document.createElement('div'); intro.id = 'hidzIntro'; intro.className = 'hidz-intro';
-  var card = document.createElement('div'); card.className = 'intro-card';
-  var top = document.createElement('div'); top.className = 'intro-top';
+  var cTop = document.createElement('div'); cTop.className = 'intro-curtain intro-curtain-top';
+  var cBot = document.createElement('div'); cBot.className = 'intro-curtain intro-curtain-bot';
+  var box = document.createElement('div'); box.className = 'intro-box';
+  var head = document.createElement('div'); head.className = 'intro-head';
   var logo = document.createElement('img'); logo.className = 'intro-logo'; logo.src = '/logo.png'; logo.alt = 'Logo HidzProject';
-  var tag = document.createElement('span'); tag.className = 'intro-tag'; tag.textContent = 'HIDZ.MY.ID';
-  top.appendChild(logo); top.appendChild(tag);
-  var h2 = document.createElement('h2'); h2.className = 'intro-name'; h2.textContent = 'SYAHID SUBHAN PUTRA';
-  var desc = document.createElement('p'); desc.className = 'intro-desc'; desc.textContent = 'Developer Website · HidzProject';
-  var acts = document.createElement('div'); acts.className = 'intro-actions';
-  var enterBtn = document.createElement('button'); enterBtn.type = 'button'; enterBtn.className = 'btn intro-enter'; enterBtn.textContent = 'MASUK →';
-  var muteBtn = document.createElement('button'); muteBtn.type = 'button'; muteBtn.className = 'intro-mute'; muteBtn.textContent = 'Masuk tanpa musik';
-  acts.appendChild(enterBtn); acts.appendChild(muteBtn);
-  card.appendChild(top); card.appendChild(h2); card.appendChild(desc); card.appendChild(acts);
-  intro.appendChild(card);
+  var pill = document.createElement('span'); pill.className = 'intro-pill'; pill.textContent = 'HIDZ.MY.ID';
+  head.appendChild(logo); head.appendChild(pill);
+  var ttl = document.createElement('h2'); ttl.className = 'intro-title'; ttl.textContent = 'SYAHID SUBHAN PUTRA';
+  var sub = document.createElement('p'); sub.className = 'intro-sub'; sub.textContent = 'DEVELOPER & FOUNDER';
+  var track = document.createElement('div'); track.className = 'intro-track';
+  var fill = document.createElement('div'); fill.className = 'intro-fill'; track.appendChild(fill);
+  var meta = document.createElement('div'); meta.className = 'intro-meta';
+  var stepTxt = document.createElement('span'); stepTxt.textContent = 'MEMUAT PROFIL...';
+  var pctTxt = document.createElement('span'); pctTxt.textContent = '0%';
+  meta.appendChild(stepTxt); meta.appendChild(pctTxt);
+  var skip = document.createElement('button'); skip.type = 'button'; skip.className = 'intro-skip'; skip.textContent = 'Lewati →';
+  box.appendChild(head); box.appendChild(ttl); box.appendChild(sub); box.appendChild(track); box.appendChild(meta); box.appendChild(skip);
+  intro.appendChild(cTop); intro.appendChild(cBot); intro.appendChild(box);
   document.documentElement.style.overflow = 'hidden';
   document.body.appendChild(intro);
 
-  function closeIntro(withMusic){
-    if (intro.classList.contains('is-leaving')) return;
-    if (withMusic){ userPaused = false; playAudio(); } else { userPaused = true; syncBtn(); }
+  var closed = false, t0 = performance.now(), DUR = 5000;
+  function closeIntro(){
+    if (closed) return; closed = true;
     intro.classList.add('is-leaving');
     document.documentElement.style.overflow = '';
-    setTimeout(function(){ if (intro.parentNode) intro.parentNode.removeChild(intro); }, 480);
+    setTimeout(function(){ if (intro.parentNode) intro.parentNode.removeChild(intro); }, 720);
   }
-  enterBtn.addEventListener('click', function(){ closeIntro(true); });
-  muteBtn.addEventListener('click', function(){ closeIntro(false); });
+  function tickIntro(now){
+    if (closed) return;
+    var raw = Math.min(1, (now - t0) / 4600);
+    var eased = 1 - Math.pow(1 - raw, 2.2);
+    var pct = Math.round(eased * 100);
+    fill.style.width = pct + '%';
+    pctTxt.textContent = pct + '%';
+    if (pct >= 85) stepTxt.textContent = 'SIAP MASUK';
+    else if (pct >= 45) stepTxt.textContent = 'MEMUAT HIDZPROJECT...';
+    if (now - t0 >= DUR){ closeIntro(); return; }
+    requestAnimationFrame(tickIntro);
+  }
+  requestAnimationFrame(tickIntro);
+  skip.addEventListener('click', function(){ tryStart(); closeIntro(); });
+  tryStart();
 })();
