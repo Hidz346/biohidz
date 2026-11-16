@@ -207,3 +207,28 @@
 
   renderCard();
 })();
+(function(){
+  var tabs = document.querySelectorAll('[data-legal-tab]');
+  var panes = document.querySelectorAll('[data-legal-pane]');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var target = tab.getAttribute('data-legal-tab');
+      tabs.forEach(function(t){
+        var on = t === tab;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      panes.forEach(function(p){ p.hidden = p.getAttribute('data-legal-pane') !== target; });
+    });
+  });
+  document.querySelectorAll('.faq-q').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = btn.closest('.faq-item');
+      if (!item) return;
+      var open = item.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      var ic = btn.querySelector('.faq-icon');
+      if (ic) ic.textContent = open ? '\u00d7' : '+';
+    });
+  });
+})();

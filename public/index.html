@@ -569,7 +569,7 @@
   .partner-info .btn{ margin-top:16px; }
 </style>
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<link rel="stylesheet" href="/bio-addons.css?v=7">
+<link rel="stylesheet" href="/bio-addons.css?v=8">
 </head>
 <body>
 
@@ -1005,18 +1005,68 @@
       <h2 data-reveal>Ngobrolin project bareng, yuk.</h2>
       <a class="btn btn-wa" data-reveal href="https://wa.me/6289679177876" target="_blank" rel="noopener">WhatsApp</a>
       <section class="legal-box" id="privasi" aria-labelledby="legalTitle" data-reveal>
-        <div class="legal-header">
-          <h3 id="legalTitle">Kebijakan &amp; Privasi</h3>
-          <span class="legal-updated" id="legalYearBadge">2026</span>
-        </div>
-        <div class="legal-grid">
-          <div class="legal-item">
-            <h4>Privasi Data</h4>
-            <p>Situs ini tidak mengumpulkan data pribadi maupun memasang pelacak iklan. Browser hanya menyimpan cache daftar project di <code>localStorage</code> agar pemuatan lebih cepat.</p>
+        <div class="legal-shell">
+          <div class="legal-nav" role="tablist" aria-label="Menu Privasi">
+            <button type="button" class="legal-tab is-active" data-legal-tab="policy" role="tab" aria-selected="true">Kebijakan Privasi</button>
+            <button type="button" class="legal-tab" data-legal-tab="faq" role="tab" aria-selected="false">FAQ</button>
           </div>
-          <div class="legal-item">
-            <h4>Layanan &amp; Hak Cipta</h4>
-            <p>Status server real-time menggunakan Firebase dan tipografi dari Google Fonts. Seluruh kode serta ekosistem HidzProject dikelola oleh Syahid Subhan Putra.</p>
+          <div class="legal-content">
+            <div class="legal-pane" data-legal-pane="policy">
+              <div class="legal-panel-head">
+                <h3 id="legalTitle">Kebijakan Privasi</h3>
+                <span class="legal-updated" id="legalYearBadge">2026</span>
+              </div>
+              <div class="legal-doc">
+                <div class="legal-sec">
+                  <h4>A. Ketentuan Umum</h4>
+                  <p>Kebijakan Privasi ini menjelaskan pengelolaan informasi saat Anda mengakses situs portofolio <strong>hidz.my.id</strong> yang dikelola oleh Syahid Subhan Putra. Dengan mengakses situs ini, Anda memahami ketentuan yang tercantum di bawah ini.</p>
+                </div>
+                <div class="legal-sec">
+                  <h4>B. Informasi &amp; Penyimpanan Lokal</h4>
+                  <p>Situs ini tidak mewajibkan pendaftaran akun dan tidak mengumpulkan data pribadi sensitif. Browser Anda hanya menyimpan cache daftar aplikasi HidzProject melalui <code>localStorage</code> agar halaman terbuka lebih cepat.</p>
+                </div>
+                <div class="legal-sec">
+                  <h4>C. Layanan Pihak Ketiga</h4>
+                  <p>Beberapa komponen terhubung dengan layanan eksternal, yaitu Google Fonts untuk tipografi, Firebase Realtime Database untuk status server, serta tautan menuju HidzProject, GitHub, dan WhatsApp apabila Anda membukanya.</p>
+                </div>
+                <div class="legal-sec">
+                  <h4>D. Hak Pengguna &amp; Pembaruan</h4>
+                  <p>Anda bebas menghapus cache browser kapan saja melalui pengaturan perangkat Anda. Kebijakan ini dapat diperbarui sewaktu-waktu seiring pengembangan situs, dan pertanyaan terkait privasi dapat disampaikan melalui WhatsApp resmi di atas.</p>
+                </div>
+              </div>
+            </div>
+            <div class="legal-pane" data-legal-pane="faq" hidden>
+              <div class="legal-panel-head">
+                <h3>Frequently Asked Questions (FAQ)</h3>
+                <span class="legal-updated">PRIVASI</span>
+              </div>
+              <div class="faq-list">
+                <div class="faq-item is-open">
+                  <button type="button" class="faq-q" aria-expanded="true"><span>Data apa saja yang diproses oleh hidz.my.id?</span><span class="faq-icon">×</span></button>
+                  <div class="faq-a">Situs portofolio ini tidak meminta login, formulir, maupun data pribadi. Hanya cache lokal daftar aplikasi HidzProject yang disimpan di browser Anda agar pemuatan lebih cepat.</div>
+                </div>
+                <div class="faq-item">
+                  <button type="button" class="faq-q" aria-expanded="false"><span>Apakah situs ini menggunakan cookies atau pelacak iklan?</span><span class="faq-icon">+</span></button>
+                  <div class="faq-a">Tidak. Situs ini bebas dari iklan dan tidak memasang pelacak perilaku pengunjung untuk tujuan pemasaran pihak ketiga.</div>
+                </div>
+                <div class="faq-item">
+                  <button type="button" class="faq-q" aria-expanded="false"><span>Mengapa halaman terhubung ke Firebase dan Google Fonts?</span><span class="faq-icon">+</span></button>
+                  <div class="faq-a">Google Fonts digunakan untuk menampilkan huruf website dengan rapi, sedangkan Firebase Realtime Database dipakai untuk menampilkan status online atau maintenance server HidzProject secara real-time.</div>
+                </div>
+                <div class="faq-item">
+                  <button type="button" class="faq-q" aria-expanded="false"><span>Bagaimana jika saya menghubungi lewat WhatsApp atau membuka tautan GitHub?</span><span class="faq-icon">+</span></button>
+                  <div class="faq-a">Tautan WhatsApp, GitHub, dan HidzProject bersifat eksternal. Saat Anda membukanya, kebijakan privasi masing-masing platform tersebut yang berlaku.</div>
+                </div>
+                <div class="faq-item">
+                  <button type="button" class="faq-q" aria-expanded="false"><span>Bagaimana cara menghapus data cache lokal dari browser saya?</span><span class="faq-icon">+</span></button>
+                  <div class="faq-a">Anda dapat menghapusnya kapan saja lewat menu Pengaturan Browser &gt; Privasi / Hapus Data Penjelajahan &gt; Data Situs.</div>
+                </div>
+                <div class="faq-item">
+                  <button type="button" class="faq-q" aria-expanded="false"><span>Bagaimana cara menghubungi pengelola terkait privasi atau kolaborasi?</span><span class="faq-icon">+</span></button>
+                  <div class="faq-a">Silakan hubungi langsung melalui tombol WhatsApp resmi yang tersedia di bagian kontak di atas.</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1662,6 +1712,6 @@
 })();
 </script>
 
-<script src="/bio-addons.js?v=7"></script>
+<script src="/bio-addons.js?v=8"></script>
 </body>
 </html>
