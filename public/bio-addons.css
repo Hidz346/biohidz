@@ -203,3 +203,13 @@
 .intro-meta{ margin-top:10px; display:flex; align-items:center; justify-content:space-between; font-family:var(--font-mono); font-size:.72rem; font-weight:800; }
 .intro-skip{ margin-top:16px; background:transparent; border:2px solid var(--ink); padding:4px 12px; font-family:var(--font-mono); font-size:.68rem; font-weight:800; cursor:pointer; background:var(--cream-2); box-shadow:2px 2px 0 var(--ink); color:var(--ink); }
 .intro-skip:active{ transform:translate(1px,1px); box-shadow:none; }
+.bgm-fall-wrap{ width:72px; height:112px; }
+.bgm-drop-note{
+  font-weight:900;
+  text-shadow:1.5px 1.5px 0 var(--cream), -1.5px -1.5px 0 var(--cream), 1.5px -1.5px 0 var(--cream), -1.5px 1.5px 0 var(--cream), 3px 3px 0 rgba(21,19,15,.45);
+}
+@keyframes noteFall{
+  0%{ opacity:0; transform:translate(-50%,-4px) scale(.7) rotate(0deg); }
+  20%{ opacity:1; transform:translate(calc(-50% + var(--nx1,4px)), 16px) scale(1.05) rotate(var(--nr1,-10deg)); }
+  100%{ opacity:0; transform:translate(calc(-50% + var(--nx2,-8px)), 92px) scale(.9) rotate(var(--nr2,18deg)); }
+}

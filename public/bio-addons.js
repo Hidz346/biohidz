@@ -382,7 +382,7 @@
     n.className = 'bgm-drop-note';
     n.textContent = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
     n.style.color = COLORS[Math.floor(Math.random() * COLORS.length)];
-    n.style.fontSize = (11 + Math.floor(Math.random() * 5)) + 'px';
+    n.style.fontSize = (18 + Math.floor(Math.random() * 7)) + 'px';
     n.style.setProperty('--nx1', ((Math.random() - 0.5) * 14).toFixed(1) + 'px');
     n.style.setProperty('--nx2', ((Math.random() - 0.5) * 24).toFixed(1) + 'px');
     n.style.setProperty('--nr1', ((Math.random() - 0.5) * 20).toFixed(0) + 'deg');
