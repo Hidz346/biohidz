@@ -1,5 +1,5 @@
-.id-stage-section{ position:relative; z-index:2; padding:36px 24px 28px; scroll-margin-top:76px; overflow:visible; }
-.id-stage-section.is-dragging{ z-index:95; }
+.id-stage-section{ position:relative; padding:36px 24px 28px; scroll-margin-top:76px; overflow:visible; }
+.id-stage.is-dragging{ z-index:95; }
 .id-stage-inner{ max-width:1100px; margin:0 auto; display:flex; flex-direction:column; align-items:center; overflow:visible; }
 .id-stage-head{
   background:var(--cream); border:var(--border-w) solid var(--ink); box-shadow:6px 6px 0 var(--ink);
@@ -8,7 +8,7 @@
 .id-stage-head .eyebrow{ margin-bottom:2px; font-size:.74rem; }
 .id-stage-head h2{ font-size:clamp(1.25rem,3.4vw,1.75rem); margin:0; }
 
-.id-stage{ position:relative; width:100%; display:flex; flex-direction:column; align-items:center; padding-top:16px; overflow:visible; }
+.id-stage{ position:relative; z-index:2; width:100%; display:flex; flex-direction:column; align-items:center; padding-top:16px; overflow:visible; }
 .id-lanyard-anchor{
   position:relative; z-index:4; width:54px; height:20px; background:var(--ink); border:var(--border-w) solid var(--ink);
   box-shadow:3px 3px 0 rgba(21,19,15,.4); border-radius:4px; display:flex; align-items:center; justify-content:space-between; padding:0 8px;

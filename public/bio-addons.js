@@ -56,7 +56,7 @@
   if (spEl && 'MutationObserver' in window) new MutationObserver(syncLiveBadges).observe(spEl, { attributes:true, attributeFilter:['data-count-to'] });
   document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible'){ updateAgeAndYear(); syncLiveBadges(); } });
   window.addEventListener('focus', function(){ updateAgeAndYear(); syncLiveBadges(); });
-  var sectionEl = document.getElementById('identitas');
+  var sectionEl = document.getElementById('idStage');
   var cardEl = document.getElementById('idCardBody');
   var flipBtn = document.getElementById('idFlipBtn');
   var strapOutline = document.getElementById('idStrapOutline');
@@ -133,7 +133,7 @@
     renderCard();
     var moving = isDragging || Math.hypot(posX, posY) > 0.35 || Math.hypot(velX, velY) > 0.15 || Math.abs(velRotY) > 0.12 || Math.abs((targetFlipY + hoverY) - rotY) > 0.25 || Math.abs(rotZ) > 0.25 || Math.abs(velRotZ) > 0.12 || Math.abs(rotX - hoverX) > 0.25 || Math.hypot(cVelX, cVelY) > 0.15;
     if (moving){ rafId = requestAnimationFrame(step); }
-    else { posX = 0; posY = 0; velX = 0; velY = 0; rotZ = 0; velRotZ = 0; rotX = hoverX; velRotX = 0; rotY = targetFlipY + hoverY; velRotY = 0; sectionEl.classList.remove('is-dragging'); renderCard(); }
+    else { sectionEl.classList.remove('is-dragging'); posX = 0; posY = 0; velX = 0; velY = 0; rotZ = 0; velRotZ = 0; rotX = hoverX; velRotX = 0; rotY = targetFlipY + hoverY; velRotY = 0; sectionEl.classList.remove('is-dragging'); renderCard(); }
   }
   function pushSample(x, y){ samples.push({ x:x, y:y, t:performance.now() }); if (samples.length > 6) samples.shift(); }
 
