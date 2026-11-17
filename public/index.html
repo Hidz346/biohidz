@@ -569,23 +569,17 @@
   .partner-info .btn{ margin-top:16px; }
 </style>
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<link rel="stylesheet" href="/bio-addons.css?v=20">
+<link rel="stylesheet" href="/bio-addons.css?v=21">
 </head>
 <body>
 <style>
 #hidzIntro{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px}
-#hidzIntro .ic{position:absolute;left:0;right:0;height:50.5%;overflow:hidden;background:#FFF4F7;background-image:radial-gradient(circle at 18% 22%,rgba(255,93,143,.14),transparent 46%),radial-gradient(circle at 82% 76%,rgba(62,193,211,.14),transparent 46%);transition:transform .68s cubic-bezier(.76,0,.24,1)}
+#hidzIntro .ic{position:absolute;left:0;right:0;height:50.5%;background:#FFF6E5;background-image:linear-gradient(rgba(21,19,15,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(21,19,15,.04) 1px,transparent 1px);background-size:32px 32px;transition:transform .68s cubic-bezier(.76,0,.24,1)}
 #hidzIntro .ic-t{top:0}
-#hidzIntro .ic-b{bottom:0;background-color:#FFF7EA}
+#hidzIntro .ic-b{bottom:0}
 #hidzIntro.is-leaving .ic-t{border-bottom:3px solid #15130F;transform:translateY(-104%)}
 #hidzIntro.is-leaving .ic-b{border-top:3px solid #15130F;transform:translateY(104%)}
-#hidzIntro .bb{position:absolute;border-radius:50%;border:2.5px solid #15130F;pointer-events:none;animation:bbFloat 7s ease-in-out infinite}
-#hidzIntro .bb1{top:16%;left:7%;width:44px;height:44px;background:rgba(255,93,143,.28)}
-#hidzIntro .bb2{top:24%;right:8%;width:30px;height:30px;background:rgba(62,193,211,.30);animation-duration:8.2s;animation-delay:-2s}
-#hidzIntro .bb3{bottom:24%;left:9%;width:34px;height:34px;background:rgba(255,201,60,.36);animation-duration:6.6s;animation-delay:-1s}
-#hidzIntro .bb4{bottom:15%;right:7%;width:48px;height:48px;background:rgba(255,93,143,.22);animation-duration:7.8s;animation-delay:-3.5s}
-@keyframes bbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-#hidzIntro .ib{position:relative;z-index:2;width:min(380px,100%);background:#FFF6E5;border:4px solid #15130F;box-shadow:8px 8px 0 #FF5D8F;padding:26px 22px;text-align:center;transition:opacity .3s ease,transform .35s ease}
+#hidzIntro .ib{position:relative;z-index:2;width:min(380px,100%);background:#FFF6E5;border:4px solid #15130F;box-shadow:8px 8px 0 #15130F;padding:26px 22px;text-align:center;transition:opacity .3s ease,transform .35s ease}
 #hidzIntro.is-leaving .ib{opacity:0;transform:scale(.95)}
 #hidzIntro .ih{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:14px}
 #hidzIntro .il{width:54px;height:54px;border-radius:50%;border:3px solid #15130F;box-shadow:3px 3px 0 #15130F;object-fit:cover;object-position:50% 68%;background:#FFEFD1}
@@ -597,7 +591,7 @@
 #hidzIntro .im{margin-top:10px;display:flex;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:800}
 #hidzIntro .isk{margin-top:16px;border:2px solid #15130F;padding:5px 14px;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:800;cursor:pointer;background:#FFEFD1;box-shadow:2px 2px 0 #15130F;color:#15130F}
 </style>
-<div id="hidzIntro"><div class="ic ic-t"><span class="bb bb1"></span><span class="bb bb2"></span></div><div class="ic ic-b"><span class="bb bb3"></span><span class="bb bb4"></span></div><div class="ib"><div class="ih"><img class="il" data-fallback-src="/logo.png" src="https://www.gobox.my.id/file/5JhzJZgCm54T.jpg" alt="Syahid Subhan Putra"><span class="ip">HIDZ.MY.ID</span></div><div class="it">SYAHID SUBHAN PUTRA</div><div class="is">DEVELOPER &amp; FOUNDER</div><div class="itr"><div class="ifl" id="introFill"></div></div><div class="im"><span id="introStep">MEMUAT...</span><span id="introPct">0%</span></div><button type="button" class="isk" id="introSkip">Lewati →</button></div></div>
+<div id="hidzIntro"><div class="ic ic-t"></div><div class="ic ic-b"></div><div class="ib"><div class="ih"><img class="il" data-fallback-src="/logo.png" src="https://www.gobox.my.id/file/5JhzJZgCm54T.jpg" alt="Syahid Subhan Putra"><span class="ip">HIDZ.MY.ID</span></div><div class="it">SYAHID SUBHAN PUTRA</div><div class="is">DEVELOPER &amp; FOUNDER</div><div class="itr"><div class="ifl" id="introFill"></div></div><div class="im"><span id="introStep">MEMUAT...</span><span id="introPct">0%</span></div><button type="button" class="isk" id="introSkip">Lewati →</button></div></div>
 
   <!-- ============ FIXED SKY BACKGROUND (whole-page backdrop) ============ -->
   <div class="bg-scene" id="sky" data-phase="pagi">
@@ -1740,6 +1734,6 @@
 })();
 </script>
 
-<script src="/bio-addons.js?v=20"></script>
+<script src="/bio-addons.js?v=21"></script>
 </body>
 </html>
