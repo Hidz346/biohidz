@@ -462,7 +462,7 @@
       if (pctTxt) pctTxt.textContent = pct + '%';
       if (stepTxt){
         if (pct >= 85) stepTxt.textContent = 'SIAP MASUK';
-        else if (pct >= 45) stepTxt.textContent = 'MEMUAT HIDZPROJECT...';
+        else if (pct >= 45) stepTxt.textContent = 'MEMUAT PORTOFOLIO...';
       }
       if (elapsed >= DUR){ closeIntro(); return; }
       requestAnimationFrame(tickIntro);
