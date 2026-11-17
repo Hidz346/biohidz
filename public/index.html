@@ -569,29 +569,29 @@
   .partner-info .btn{ margin-top:16px; }
 </style>
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<link rel="stylesheet" href="/bio-addons.css?v=18">
+<link rel="stylesheet" href="/bio-addons.css?v=19">
 </head>
 <body>
 <style>
 #hidzIntro{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px}
-#hidzIntro .ic{position:absolute;left:0;right:0;height:50%;background:#FFF6E5;background-image:radial-gradient(rgba(21,19,15,.11) 1.2px,transparent 1.2px);background-size:16px 16px;transition:transform .68s cubic-bezier(.76,0,.24,1)}
-#hidzIntro .ic-t{top:0;border-bottom:4px solid #15130F}
-#hidzIntro .ic-b{bottom:0;background-color:#FFEFD1;border-top:4px solid #15130F}
-#hidzIntro.is-leaving .ic-t{transform:translateY(-104%)}
-#hidzIntro.is-leaving .ic-b{transform:translateY(104%)}
-#hidzIntro .ib{position:relative;z-index:2;width:min(390px,100%);background:#FFF6E5;border:4px solid #15130F;box-shadow:10px 10px 0 #15130F;padding:26px 22px;text-align:center;transition:opacity .3s ease,transform .35s ease}
+#hidzIntro .ic{position:absolute;left:0;right:0;height:50.5%;background:#12110E;background-image:linear-gradient(rgba(255,246,229,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,246,229,.045) 1px,transparent 1px);background-size:36px 36px;transition:transform .68s cubic-bezier(.76,0,.24,1)}
+#hidzIntro .ic-t{top:0}
+#hidzIntro .ic-b{bottom:0}
+#hidzIntro.is-leaving .ic-t{border-bottom:3px solid #FFC93C;transform:translateY(-104%)}
+#hidzIntro.is-leaving .ic-b{border-top:3px solid #FFC93C;transform:translateY(104%)}
+#hidzIntro .ib{position:relative;z-index:2;width:min(380px,100%);background:#FFF6E5;border:4px solid #15130F;box-shadow:8px 8px 0 #FFC93C;padding:26px 22px;text-align:center;transition:opacity .3s ease,transform .35s ease}
 #hidzIntro.is-leaving .ib{opacity:0;transform:scale(.95)}
-#hidzIntro .ih{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px}
-#hidzIntro .il{width:44px;height:44px;border-radius:50%;border:3px solid #15130F;box-shadow:3px 3px 0 #15130F;object-fit:cover}
+#hidzIntro .ih{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:14px}
+#hidzIntro .il{width:54px;height:54px;border-radius:50%;border:3px solid #15130F;box-shadow:3px 3px 0 #15130F;object-fit:cover;object-position:50% 68%;background:#FFEFD1}
 #hidzIntro .ip{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:800;letter-spacing:.08em;background:#FFC93C;border:2px solid #15130F;padding:4px 10px}
-#hidzIntro .it{font-family:'Orbitron',sans-serif;font-size:clamp(1.08rem,4.3vw,1.38rem);font-weight:900;color:#15130F;line-height:1.2}
+#hidzIntro .it{font-family:'Orbitron',sans-serif;font-size:clamp(1.06rem,4.3vw,1.34rem);font-weight:900;color:#15130F;line-height:1.2}
 #hidzIntro .is{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#6C4AB6;margin-top:5px;letter-spacing:.08em}
-#hidzIntro .itr{margin-top:20px;height:18px;background:#FFEFD1;border:3px solid #15130F;box-shadow:4px 4px 0 #15130F;overflow:hidden}
-#hidzIntro .ifl{height:100%;width:0%;background:linear-gradient(90deg,#FFC93C 0%,#FF5D8F 55%,#3EC1D3 100%);border-right:3px solid #15130F}
-#hidzIntro .im{margin-top:10px;display:flex;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:800}
-#hidzIntro .isk{margin-top:16px;border:2px solid #15130F;padding:4px 12px;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:800;cursor:pointer;background:#FFEFD1;box-shadow:2px 2px 0 #15130F;color:#15130F}
+#hidzIntro .itr{margin-top:20px;height:16px;background:#FFEFD1;border:3px solid #15130F;box-shadow:4px 4px 0 #15130F;overflow:hidden}
+#hidzIntro .ifl{height:100%;width:0%;background:#FFC93C;border-right:3px solid #15130F}
+#hidzIntro .im{margin-top:10px;display:flex;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:800}
+#hidzIntro .isk{margin-top:16px;border:2px solid #15130F;padding:5px 14px;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:800;cursor:pointer;background:#FFEFD1;box-shadow:2px 2px 0 #15130F;color:#15130F}
 </style>
-<div id="hidzIntro"><div class="ic ic-t"></div><div class="ic ic-b"></div><div class="ib"><div class="ih"><img class="il" src="/logo.png" alt="Logo"><span class="ip">HIDZ.MY.ID</span></div><div class="it">SYAHID SUBHAN PUTRA</div><div class="is">DEVELOPER &amp; FOUNDER</div><div class="itr"><div class="ifl" id="introFill"></div></div><div class="im"><span id="introStep">MEMUAT PROFIL...</span><span id="introPct">0%</span></div><button type="button" class="isk" id="introSkip">Lewati →</button></div></div>
+<div id="hidzIntro"><div class="ic ic-t"></div><div class="ic ic-b"></div><div class="ib"><div class="ih"><img class="il" data-fallback-src="/logo.png" src="https://www.gobox.my.id/file/5JhzJZgCm54T.jpg" alt="Syahid Subhan Putra"><span class="ip">HIDZ.MY.ID</span></div><div class="it">SYAHID SUBHAN PUTRA</div><div class="is">DEVELOPER &amp; FOUNDER</div><div class="itr"><div class="ifl" id="introFill"></div></div><div class="im"><span id="introStep">MEMUAT...</span><span id="introPct">0%</span></div><button type="button" class="isk" id="introSkip">Lewati →</button></div></div>
 
   <!-- ============ FIXED SKY BACKGROUND (whole-page backdrop) ============ -->
   <div class="bg-scene" id="sky" data-phase="pagi">
@@ -1734,6 +1734,6 @@
 })();
 </script>
 
-<script src="/bio-addons.js?v=18"></script>
+<script src="/bio-addons.js?v=19"></script>
 </body>
 </html>
