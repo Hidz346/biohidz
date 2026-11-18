@@ -67,68 +67,75 @@
   var claspEl = document.getElementById('idClasp');
   if (!stageEl || !cardEl) return;
 
-  var strapRestLen = 52, cardHeight = cardEl.offsetHeight || 446, cardHalfH = cardHeight * 0.5, restCenterY = strapRestLen + cardHalfH;
+  var glares = cardEl.querySelectorAll('.id-glare');
+  var strapRestLen = 52, cardHeight = cardEl.offsetHeight || 496, cardHalfH = cardHeight * 0.5, restCenterY = strapRestLen + cardHalfH;
   var posX = 0, posY = 0, velX = 0, velY = 0, rotX = 0, velRotX = 0, rotY = 0, velRotY = 0, rotZ = 0, velRotZ = 0;
-  var targetFlipY = 0, isFreeSpin = false, hoverX = 0, hoverY = 0, glareX = 50, glareY = 30;
-  var ctrlX = 0, ctrlY = 36, cVelX = 0, cVelY = 0;
-  var isDragging = false, activePointerId = null, startClientX = 0, startClientY = 0, startPosX = 0, startPosY = 0, startTime = 0, samples = [], rafId = null;
+  var targetFlipY = 0, isFreeSpin = false, hoverX = 0, hoverY = 0, glareX = 0, glareY = 0;
+  var ctrlX = 0, ctrlY = 36, cVelX = 0, cVelY = 0, lastEndX = 999, lastEndY = 999, lastRotZ = 999;
+  var isDragging = false, isVisible = true, activePointerId = null, startClientX = 0, startClientY = 0, startPosX = 0, startPosY = 0, startTime = 0, samples = [], rafId = null, lastFrameT = 0;
+  var cachedRect = { left:0, top:0, width:314, height:496 };
 
   function clamp(v, min, max){ return v < min ? min : (v > max ? max : v); }
-  function measureCard(){ cardHeight = cardEl.offsetHeight || 446; cardHalfH = cardHeight * 0.5; restCenterY = strapRestLen + cardHalfH; }
+  function measureCard(){ cardHeight = cardEl.offsetHeight || 496; cardHalfH = cardHeight * 0.5; restCenterY = strapRestLen + cardHalfH; }
+  function cacheRect(){ var r = cardEl.getBoundingClientRect(); if (r.width > 0) cachedRect = { left:r.left, top:r.top, width:r.width, height:r.height }; }
   window.addEventListener('resize', measureCard);
 
-  function updateLanyard(){
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ isVisible = es[0].isIntersecting; }, { threshold:0.02 }).observe(stageEl);
+  }
+  function updateLanyard(dt){
     if (!strapOutline || !strapBody || !strapStripe || !claspEl) return;
     var radZ = rotZ * Math.PI / 180, slotRadius = cardHalfH - 11;
     var endX = posX + slotRadius * Math.sin(radZ), endY = restCenterY + posY - slotRadius * Math.cos(radZ);
-    var dist = Math.hypot(endX, endY), sag = Math.max(0, 16 - dist * 0.04);
-    cVelX = (cVelX + (endX * 0.48 - ctrlX) * 0.24) * 0.74;
-    cVelY = (cVelY + (endY * 0.5 + sag - ctrlY) * 0.24) * 0.74;
-    ctrlX += cVelX; ctrlY += cVelY;
+    var dist = Math.hypot(endX, endY), sag = Math.max(0, 16 - dist * 0.04), f = Math.pow(0.74, dt);
+    cVelX = (cVelX + (endX * 0.48 - ctrlX) * 0.24 * dt) * f;
+    cVelY = (cVelY + (endY * 0.5 + sag - ctrlY) * 0.24 * dt) * f;
+    ctrlX += cVelX * dt; ctrlY += cVelY * dt;
+    if (Math.abs(endX - lastEndX) < 0.2 && Math.abs(endY - lastEndY) < 0.2 && Math.abs(rotZ - lastRotZ) < 0.2) return;
+    lastEndX = endX; lastEndY = endY; lastRotZ = rotZ;
     var d = 'M 0 0 Q ' + ctrlX.toFixed(1) + ' ' + ctrlY.toFixed(1) + ' ' + endX.toFixed(1) + ' ' + endY.toFixed(1);
     strapOutline.setAttribute('d', d); strapBody.setAttribute('d', d); strapStripe.setAttribute('d', d);
     claspEl.setAttribute('transform', 'translate(' + endX.toFixed(1) + ',' + endY.toFixed(1) + ') rotate(' + rotZ.toFixed(1) + ')');
   }
 
-  function renderCard(){
-    cardEl.style.transform = 'translate3d(' + posX.toFixed(2) + 'px,' + posY.toFixed(2) + 'px,0) rotateZ(' + rotZ.toFixed(2) + 'deg) rotateX(' + rotX.toFixed(2) + 'deg) rotateY(' + rotY.toFixed(2) + 'deg)';
-    cardEl.style.setProperty('--gx', glareX.toFixed(1) + '%');
-    cardEl.style.setProperty('--gy', glareY.toFixed(1) + '%');
-    updateLanyard();
+  function renderCard(dt){
+    cardEl.style.transform = 'translate3d(' + posX.toFixed(1) + 'px,' + posY.toFixed(1) + 'px,0) rotateZ(' + rotZ.toFixed(1) + 'deg) rotateX(' + rotX.toFixed(1) + 'deg) rotateY(' + rotY.toFixed(1) + 'deg)';
+    var gx = glareX.toFixed(1) + 'px', gy = glareY.toFixed(1) + 'px';
+    for (var g = 0; g < glares.length; g++) glares[g].style.transform = 'translate3d(' + gx + ',' + gy + ',0)';
+    updateLanyard(dt || 1);
   }
-  function ensureLoop(){ if (!rafId) rafId = requestAnimationFrame(step); }
+  function ensureLoop(){ if (!rafId){ lastFrameT = performance.now(); rafId = requestAnimationFrame(step); } }
   function flipInDirection(dir){
     isFreeSpin = false;
     targetFlipY = Math.round(targetFlipY / 180) * 180 + (dir >= 0 ? 180 : -180);
     velRotZ += dir >= 0 ? -4 : 4;
     ensureLoop();
   }
-
-  function step(){
+  function step(now){
     rafId = null;
+    var dt = lastFrameT ? clamp((now - lastFrameT) / 16.667, 0.4, 2.0) : 1;
+    lastFrameT = now;
     if (!isDragging){
-      velX = (velX - 0.02 * posX) * 0.95;
-      velY = (velY - 0.02 * posY) * 0.95;
-      posX += velX; posY += velY;
-
+      var fPos = Math.pow(0.95, dt);
+      velX = (velX - 0.02 * posX * dt) * fPos; velY = (velY - 0.02 * posY * dt) * fPos;
+      posX += velX * dt; posY += velY * dt;
       if (isFreeSpin && Math.abs(velRotY) > 2.4){
-        velRotY *= 0.976; rotY += velRotY; targetFlipY = Math.round(rotY / 180) * 180;
+        velRotY *= Math.pow(0.976, dt); rotY += velRotY * dt; targetFlipY = Math.round(rotY / 180) * 180;
       } else {
         isFreeSpin = false;
-        velRotY = (velRotY + ((targetFlipY + hoverY) - rotY) * 0.14) * 0.74;
-        rotY += velRotY;
+        velRotY = (velRotY + ((targetFlipY + hoverY) - rotY) * 0.14 * dt) * Math.pow(0.74, dt);
+        rotY += velRotY * dt;
       }
-
-      var ropeAngle = Math.atan2(posX, Math.max(80, restCenterY + posY)) * (180 / Math.PI);
-      velRotZ = (velRotZ + (clamp(-ropeAngle * 0.85 + velX * 0.5, -75, 75) - rotZ) * 0.12) * 0.84;
-      rotZ += velRotZ;
-      velRotX = (velRotX + ((hoverX + velY * 0.4) - rotX) * 0.11) * 0.84;
-      rotX += velRotX;
+      var ropeAngle = Math.atan2(posX, Math.max(80, restCenterY + posY)) * 57.2958;
+      velRotZ = (velRotZ + (clamp(-ropeAngle * 0.85 + velX * 0.5, -75, 75) - rotZ) * 0.12 * dt) * Math.pow(0.84, dt);
+      rotZ += velRotZ * dt;
+      velRotX = (velRotX + ((hoverX + velY * 0.4) - rotX) * 0.11 * dt) * Math.pow(0.84, dt);
+      rotX += velRotX * dt;
     }
-    renderCard();
+    renderCard(dt);
     var moving = isDragging || Math.hypot(posX, posY) > 0.35 || Math.hypot(velX, velY) > 0.15 || Math.abs(velRotY) > 0.12 || Math.abs((targetFlipY + hoverY) - rotY) > 0.25 || Math.abs(rotZ) > 0.25 || Math.abs(velRotZ) > 0.12 || Math.abs(rotX - hoverX) > 0.25 || Math.hypot(cVelX, cVelY) > 0.15;
     if (moving){ rafId = requestAnimationFrame(step); }
-    else { stageEl.classList.remove('is-dragging'); posX = 0; posY = 0; velX = 0; velY = 0; rotZ = 0; velRotZ = 0; rotX = hoverX; velRotX = 0; rotY = targetFlipY + hoverY; velRotY = 0; renderCard(); }
+    else { stageEl.classList.remove('is-dragging'); posX = 0; posY = 0; velX = 0; velY = 0; rotZ = 0; velRotZ = 0; rotX = hoverX; velRotX = 0; rotY = targetFlipY + hoverY; velRotY = 0; renderCard(1); }
   }
   function pushSample(x, y){ samples.push({ x:x, y:y, t:performance.now() }); if (samples.length > 6) samples.shift(); }
 
@@ -136,30 +143,30 @@
     if (e.button !== undefined && e.button !== 0) return;
     isDragging = true; isFreeSpin = false; activePointerId = e.pointerId;
     try { cardEl.setPointerCapture(e.pointerId); } catch (err) {}
+    cacheRect();
     stageEl.classList.add('is-dragging'); cardEl.classList.add('is-grabbed');
     startClientX = e.clientX; startClientY = e.clientY; startPosX = posX; startPosY = posY; startTime = performance.now();
     velX = 0; velY = 0; velRotY = 0; velRotZ = 0; velRotX = 0; samples = []; pushSample(e.clientX, e.clientY); ensureLoop();
   });
 
+  cardEl.addEventListener('pointerenter', function(e){ if (e.pointerType === 'mouse') cacheRect(); });
+
   cardEl.addEventListener('pointermove', function(e){
-    var rect = cardEl.getBoundingClientRect();
-    if (rect.width > 0 && rect.height > 0){
-      glareX = clamp(((e.clientX - rect.left) / rect.width) * 100, 0, 100);
-      glareY = clamp(((e.clientY - rect.top) / rect.height) * 100, 0, 100);
-    }
     if (isDragging && e.pointerId === activePointerId){
       var prevX = posX, prevY = posY;
-      posX = startPosX + (e.clientX - startClientX);
-      posY = startPosY + (e.clientY - startClientY);
+      posX = startPosX + (e.clientX - startClientX); posY = startPosY + (e.clientY - startClientY);
       var stepVx = posX - prevX, stepVy = posY - prevY;
-      var ropeAngle = Math.atan2(posX, Math.max(80, restCenterY + posY)) * (180 / Math.PI);
+      var ropeAngle = Math.atan2(posX, Math.max(80, restCenterY + posY)) * 57.2958;
       rotZ = clamp(-ropeAngle * 0.9 + stepVx * 0.85, -85, 85);
       rotX = clamp(-stepVy * 0.9, -45, 45);
       rotY += stepVx * 0.85;
+      glareX = clamp(posX * 0.12, -32, 32); glareY = clamp(posY * 0.12, -32, 32);
       pushSample(e.clientX, e.clientY); ensureLoop();
-    } else if (e.pointerType === 'mouse' && rect.width > 0){
-      hoverY = clamp((((e.clientX - rect.left) / rect.width) - 0.5) * 18, -10, 10);
-      hoverX = clamp(-(((e.clientY - rect.top) / rect.height) - 0.5) * 18, -10, 10);
+    } else if (e.pointerType === 'mouse' && cachedRect.width > 0){
+      var nx = ((e.clientX - cachedRect.left) / cachedRect.width) - 0.5;
+      var ny = ((e.clientY - cachedRect.top) / cachedRect.height) - 0.5;
+      hoverY = clamp(nx * 18, -10, 10); hoverX = clamp(-ny * 18, -10, 10);
+      glareX = clamp(nx * 44, -26, 26); glareY = clamp(ny * 44, -26, 26);
       ensureLoop();
     }
   });
@@ -171,27 +178,24 @@
     for (var s = samples.length - 1; s >= 0; s--){ if (now - samples[s].t >= 24){ ref = samples[s]; break; } }
     var dt = Math.max(14, now - ref.t), vx = ((e.clientX - ref.x) / dt) * 16, vy = ((e.clientY - ref.y) / dt) * 16, speed = Math.hypot(vx, vy);
     var totalDx = e.clientX - startClientX, totalDy = e.clientY - startClientY, elapsed = now - startTime;
-
     if (Math.hypot(totalDx, totalDy) < 8 && elapsed < 250){ flipInDirection(1); return; }
     if (elapsed < 360 && Math.abs(totalDx) > 36 && Math.abs(totalDx) > Math.abs(totalDy) * 1.35 && speed < 15){
       velX = vx * 0.45; velY = vy * 0.25; flipInDirection(totalDx >= 0 ? 1 : -1); return;
     }
-
     velX = clamp(vx * 1.45, -95, 95); velY = clamp(vy * 1.45, -95, 95);
     if (speed >= 5){
       isFreeSpin = true;
       velRotY = (vx !== 0 ? (vx > 0 ? 1 : -1) : 1) * clamp(speed * 1.65, 16, 60);
       velRotZ = clamp(vx * 0.85, -28, 28); velRotX = clamp(-vy * 0.85, -28, 28);
     } else {
-      isFreeSpin = false;
-      targetFlipY = Math.round(rotY / 180) * 180;
+      isFreeSpin = false; targetFlipY = Math.round(rotY / 180) * 180;
     }
     ensureLoop();
   }
 
   cardEl.addEventListener('pointerup', endDrag);
   cardEl.addEventListener('pointercancel', endDrag);
-  cardEl.addEventListener('pointerleave', function(e){ if (!isDragging && e.pointerType === 'mouse'){ hoverX = 0; hoverY = 0; ensureLoop(); } });
+  cardEl.addEventListener('pointerleave', function(e){ if (!isDragging && e.pointerType === 'mouse'){ hoverX = 0; hoverY = 0; glareX = 0; glareY = 0; ensureLoop(); } });
   cardEl.addEventListener('keydown', function(e){
     if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); flipInDirection(1); }
     else if (e.key === 'ArrowRight'){ e.preventDefault(); flipInDirection(1); }
@@ -202,10 +206,10 @@
   var lastScrollY = window.scrollY;
   window.addEventListener('scroll', function(){
     var sy = window.scrollY, delta = clamp(sy - lastScrollY, -35, 35); lastScrollY = sy;
-    if (!isDragging && Math.abs(delta) > 1){ velY -= delta * 0.14; velRotX += delta * 0.10; ensureLoop(); }
+    if (isVisible && !isDragging && Math.abs(delta) > 1){ velY -= delta * 0.12; velRotX += delta * 0.08; ensureLoop(); }
   }, { passive:true });
 
-  renderCard();
+  renderCard(1);
 })();
 (function(){
   var tabs = document.querySelectorAll('[data-legal-tab]');

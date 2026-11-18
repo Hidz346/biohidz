@@ -180,3 +180,6 @@
   20%{ opacity:1; transform:translate(calc(-50% + var(--nx1,4px)), 16px) scale(1.05) rotate(var(--nr1,-10deg)); }
   100%{ opacity:0; transform:translate(calc(-50% + var(--nx2,-8px)), 92px) scale(.9) rotate(var(--nr2,18deg)); }
 }
+.id-face{ contain:layout paint style; }
+.id-glare{ inset:-35%; background:linear-gradient(125deg,transparent 36%,rgba(255,255,255,.26) 50%,transparent 64%); mix-blend-mode:normal; will-change:transform,opacity; transform:translate3d(0,0,0); }
+.id-lanyard-svg{ shape-rendering:optimizeSpeed; }
